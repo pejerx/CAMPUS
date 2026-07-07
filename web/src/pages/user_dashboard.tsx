@@ -13,7 +13,7 @@ import { useState } from "react";
 import "../css/style.css";
 import { useNavigate } from "react-router-dom";
 import "../css/component_style.css";
-import ReportItemModal from "../components/report_item_form";
+import ReportItemModal from "../item-report/report_item_form";
 
 function UserDashboardPage() {
   const navigate = useNavigate();
