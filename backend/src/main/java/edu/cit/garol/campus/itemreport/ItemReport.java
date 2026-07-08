@@ -51,7 +51,7 @@ public class ItemReport {
         return description;
     }
 
-    public String getLastSeenLocation() {
+    public String getLocation() {
         return lastSeenLocation;
     }
 
@@ -87,8 +87,8 @@ public class ItemReport {
         this.description = description;
     }
 
-    public void setLastSeenLocation(String lastSeenLocation) {
-        this.lastSeenLocation = lastSeenLocation;
+    public void setLocation(String location) {
+        this.lastSeenLocation = location;
     }
 
     public void setImagePath(String imagePath) {
