@@ -48,10 +48,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Optional<User> userByEmail = userRepository.findByEmail(request.id);
-        Optional<User> userById = userRepository.findById(request.id);
 
-        Optional<User> user = userByEmail.isPresent() ? userByEmail : userById;
+        Optional<User> user;
+
+        if (request.id.contains("@")) {
+            user = userRepository.findByEmail(request.id);
+        } else {
+            user = userRepository.findById(request.id);
+        }
 
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found.");
