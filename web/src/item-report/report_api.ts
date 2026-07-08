@@ -1,34 +1,39 @@
-const API_URL = "http://localhost:8080/api/reports";
-
-export type ReportItemFormData = {
-  userId: number;
+type CreateReportItemData = {
+  userId: string;
+  reportType: "LOST" | "FOUND";
   itemName: string;
   category: string;
   description: string;
-  lastSeenLocation: string;
-  imageFile: File | null;
+  location: string;
+  imageFile?: File | null;
+  imageUrl?: string;
 };
 
-export async function createReportItem(data: ReportItemFormData) {
+export async function createReportItem(data: CreateReportItemData) {
   const formData = new FormData();
 
-  formData.append("userId", String(data.userId));
+  formData.append("userId", data.userId);
+  formData.append("reportType", data.reportType);
   formData.append("itemName", data.itemName);
   formData.append("category", data.category);
   formData.append("description", data.description);
-  formData.append("lastSeenLocation", data.lastSeenLocation);
+  formData.append("location", data.location);
 
   if (data.imageFile) {
     formData.append("image", data.imageFile);
   }
 
-  const response = await fetch(API_URL, {
+  if (data.imageUrl) {
+    formData.append("imageUrl", data.imageUrl);
+  }
+
+  const response = await fetch("http://localhost:8080/api/reports", {
     method: "POST",
     body: formData,
   });
 
   if (!response.ok) {
-    throw new Error("Failed to submit report");
+    throw new Error("Failed to create report");
   }
 
   return response.json();
