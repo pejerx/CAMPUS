@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.screens
+package cit.edu.garol.campus.features.authentication.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,18 +16,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cit.edu.garol.campus.components.CustomTextField
-import cit.edu.garol.campus.components.LinkText
-import cit.edu.garol.campus.components.PrimaryButton
-import cit.edu.garol.campus.components.RoleDropdown
-import cit.edu.garol.campus.components.TopCurvedHeader
+import cit.edu.garol.campus.features.authentication.components.CustomTextField
+import cit.edu.garol.campus.features.authentication.components.LinkText
+import cit.edu.garol.campus.features.authentication.components.PrimaryButton
+import cit.edu.garol.campus.features.authentication.components.RoleDropdown
+import cit.edu.garol.campus.features.authentication.components.TopCurvedHeader
 import cit.edu.garol.campus.ui.theme.Background
 import cit.edu.garol.campus.ui.theme.Black
 import cit.edu.garol.campus.ui.theme.TextSecondary
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
-import cit.edu.garol.campus.model.RegisterRequest
-import cit.edu.garol.campus.network.RetrofitInstance
+import cit.edu.garol.campus.features.authentication.model.RegisterRequest
+import cit.edu.garol.campus.core.network.RetrofitInstance
 @Composable
 fun RegisterPage(
     onGoToLogin: () -> Unit

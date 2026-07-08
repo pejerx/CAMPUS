@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.components
+package cit.edu.garol.campus.features.authentication.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

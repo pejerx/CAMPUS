@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.components
+package cit.edu.garol.campus.features.authentication.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Text

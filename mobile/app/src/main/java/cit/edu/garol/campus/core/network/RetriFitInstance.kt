@@ -1,6 +1,6 @@
-package cit.edu.garol.campus.network
+package cit.edu.garol.campus.core.network
 
-import cit.edu.garol.campus.features.authentication.api.AuthApi
+import cit.edu.garol.campus.features.authentication.network.AuthApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

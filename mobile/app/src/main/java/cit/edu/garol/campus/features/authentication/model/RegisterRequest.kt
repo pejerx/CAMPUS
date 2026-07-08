@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.model
+package cit.edu.garol.campus.features.authentication.model
 
 data class RegisterRequest(
     val firstName: String,
