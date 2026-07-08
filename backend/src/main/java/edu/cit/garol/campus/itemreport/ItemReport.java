@@ -12,6 +12,8 @@ public class ItemReport {
 
     private String userId;
 
+    private String reportType;
+
     private String itemName;
 
     private String category;
@@ -31,6 +33,10 @@ public class ItemReport {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getReportType() {
+        return reportType;
     }
 
     public String getItemName() {
@@ -63,6 +69,10 @@ public class ItemReport {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
     public void setItemName(String itemName) {
