@@ -1,5 +1,7 @@
 package edu.cit.garol.campus.itemreport;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,7 +57,9 @@ public class ItemReportController {
             report.setDescription(description);
             report.setLocation(location);
             report.setImagePath(imagePath);
-            report.setStatus("Pending");
+
+            // User-submitted reports should NOT be public immediately.
+            report.setStatus("Under Review");
 
             ItemReport savedReport = itemReportRepository.save(report);
 
@@ -67,7 +72,37 @@ public class ItemReportController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllReports() {
+    public ResponseEntity<List<ItemReport>> getAllReports() {
         return ResponseEntity.ok(itemReportRepository.findAll());
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<List<ItemReport>> getPublicReports() {
+        List<String> publicStatuses = List.of(
+                "Unclaimed",
+                "Pending Claim",
+                "Claimed"
+        );
+
+        return ResponseEntity.ok(itemReportRepository.findByStatusIn(publicStatuses));
+    }
+
+    @GetMapping("/uploads/{fileName}")
+    public ResponseEntity<Resource> getUploadedImage(@PathVariable String fileName) {
+        try {
+            Path imagePath = Paths.get("uploads").resolve(fileName);
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
