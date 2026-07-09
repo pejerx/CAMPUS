@@ -10,11 +10,35 @@ type LoginModalProps = {
 function LoginModal({ onClose, onRegister }: LoginModalProps) {
   const navigate = useNavigate();
 
+  const [loginType, setLoginType] = useState<"USER" | "ADMIN">("USER");
   const [idOrEmail, setIdOrEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
+      if (loginType === "ADMIN") {
+        if (
+          idOrEmail.trim() !== "1" ||
+          password.trim() !== "school-admin-access"
+        ) {
+          alert("Invalid admin credentials.");
+          return;
+        }
+
+        const admin = {
+          id: "1",
+          firstName: "Admin",
+          role: "ADMIN",
+        };
+
+        localStorage.setItem("admin", JSON.stringify(admin));
+        localStorage.setItem("user", JSON.stringify(admin));
+
+        onClose();
+        navigate("/admin-dashboard");
+        return;
+      }
+
       const response = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: {
@@ -37,9 +61,7 @@ function LoginModal({ onClose, onRegister }: LoginModalProps) {
       localStorage.setItem("user", JSON.stringify(user));
 
       onClose();
-
       navigate("/user-dashboard");
-      
     } catch (error) {
       console.error(error);
       alert("Unable to connect to server.");
@@ -55,10 +77,32 @@ function LoginModal({ onClose, onRegister }: LoginModalProps) {
 
         <h2>Login to CAMPUS</h2>
 
-        <label>ID / Email</label>
+        <div className="login-toggle">
+          <button
+            type="button"
+            className={loginType === "USER" ? "active" : ""}
+            onClick={() => setLoginType("USER")}
+          >
+            User
+          </button>
+
+          <button
+            type="button"
+            className={loginType === "ADMIN" ? "active" : ""}
+            onClick={() => setLoginType("ADMIN")}
+          >
+            Admin
+          </button>
+        </div>
+
+        <label>{loginType === "ADMIN" ? "Admin ID" : "ID / Email"}</label>
         <input
           type="text"
-          placeholder="Enter your ID or email"
+          placeholder={
+            loginType === "ADMIN"
+              ? "Enter admin ID"
+              : "Enter your ID or email"
+          }
           value={idOrEmail}
           onChange={(e) => setIdOrEmail(e.target.value)}
         />
@@ -66,7 +110,11 @@ function LoginModal({ onClose, onRegister }: LoginModalProps) {
         <label>Password</label>
         <input
           type="password"
-          placeholder="Enter your password"
+          placeholder={
+            loginType === "ADMIN"
+              ? "Enter admin password"
+              : "Enter your password"
+          }
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -75,12 +123,17 @@ function LoginModal({ onClose, onRegister }: LoginModalProps) {
           Login
         </button>
 
-        <p className="switch-text">
-          Don't have an account?{" "}
-          <button onClick={onRegister}>Sign up</button>
-        </p>
+        {loginType === "USER" && (
+          <>
+            <p className="switch-text">
+              Don't have an account?{" "}
+              <button onClick={onRegister}>Sign up</button>
+            </p>
 
-        <button className="forgot-btn">Forgot password?</button>
+            <button className="forgot-btn">Forgot password?</button>
+          </>
+        )}
+
         <div className="bottom-line"></div>
       </div>
     </div>
