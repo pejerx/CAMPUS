@@ -7,7 +7,12 @@ public class AdminLoginResponse {
     private String role;
     private String redirectTo;
 
-    public AdminLoginResponse(String id, String firstName, String role, String redirectTo) {
+    public AdminLoginResponse(
+            String id,
+            String firstName,
+            String role,
+            String redirectTo
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.role = role;
