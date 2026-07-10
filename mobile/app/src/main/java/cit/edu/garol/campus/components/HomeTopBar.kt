@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.model
+package cit.edu.garol.campus.components
 
 data class ItemCardData(
     val date: String,
