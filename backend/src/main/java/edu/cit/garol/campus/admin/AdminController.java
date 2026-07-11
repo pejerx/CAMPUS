@@ -18,14 +18,31 @@ public class AdminController {
         this.itemReportRepository = itemReportRepository;
     }
 
-    @GetMapping("/reports")
-    public ResponseEntity<List<ItemReport>> getAllReports() {
-        return ResponseEntity.ok(itemReportRepository.findAll());
-    }
-
     @GetMapping("/reported-items")
     public ResponseEntity<List<ItemReport>> getReportedItems() {
         return ResponseEntity.ok(itemReportRepository.findAll());
+    }
+
+    @PutMapping("/reports/{id}/approve")
+    public ResponseEntity<ItemReport> approveReport(@PathVariable String id) {
+        ItemReport report = itemReportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item report not found"));
+
+        report.setStatus("Unclaimed");
+
+        ItemReport updatedReport = itemReportRepository.save(report);
+        return ResponseEntity.ok(updatedReport);
+    }
+
+    @PutMapping("/reports/{id}/reject")
+    public ResponseEntity<ItemReport> rejectReport(@PathVariable String id) {
+        ItemReport report = itemReportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item report not found"));
+
+        report.setStatus("Rejected");
+
+        ItemReport updatedReport = itemReportRepository.save(report);
+        return ResponseEntity.ok(updatedReport);
     }
 
     @PutMapping("/reports/{id}/status")
@@ -39,7 +56,6 @@ public class AdminController {
         report.setStatus(request.getStatus());
 
         ItemReport updatedReport = itemReportRepository.save(report);
-
         return ResponseEntity.ok(updatedReport);
     }
 }

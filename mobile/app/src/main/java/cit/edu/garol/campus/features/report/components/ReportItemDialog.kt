@@ -1,4 +1,4 @@
-package cit.edu.garol.campus.features.dashboard.components
+package cit.edu.garol.campus.features.report.components
 
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -118,10 +118,9 @@ fun ReportItemDialog(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                ReportTextField(
-                    value = category,
-                    onValueChange = { category = it },
-                    label = "Category"
+                ReportCategoryDropdown(
+                    category = category,
+                    onCategorySelected = { category = it }
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -178,6 +177,15 @@ fun ReportItemDialog(
 
                 Button(
                     onClick = {
+                        if (
+                            itemName.isBlank() ||
+                            category.isBlank() ||
+                            description.isBlank() ||
+                            location.isBlank()
+                        ) {
+                            return@Button
+                        }
+
                         if (selectedReportType == "LOST") {
                             onSubmitLostItem(
                                 userId,
@@ -283,6 +291,85 @@ private fun ReportTextField(
         ),
         modifier = Modifier.fillMaxWidth()
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ReportCategoryDropdown(
+    category: String,
+    onCategorySelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    val categories = listOf(
+        "Gadget",
+        "Clothing",
+        "Bag",
+        "Wallet",
+        "ID / Documents",
+        "Books",
+        "School Supplies",
+        "Keys",
+        "Umbrella",
+        "Jewelry",
+        "Accessories",
+        "Sports Equipment",
+        "Water Bottle",
+        "Electronics",
+        "Others"
+    )
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        OutlinedTextField(
+            value = category,
+            onValueChange = {},
+            readOnly = true,
+            label = {
+                Text("Category")
+            },
+            placeholder = {
+                Text("Select Category")
+            },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF800000),
+                unfocusedBorderColor = Color(0xFFD4D4D4),
+                cursorColor = Color(0xFF800000)
+            ),
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }
+        ) {
+            categories.forEach { selectedCategory ->
+                DropdownMenuItem(
+                    text = {
+                        Text(selectedCategory)
+                    },
+                    onClick = {
+                        onCategorySelected(selectedCategory)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
 }
 
 private fun getFileNameFromUri(

@@ -18,7 +18,7 @@ import "../css/component_style.css";
 import { getAllReports, updateReportStatus } from "./admin_api";
 
 type ItemReport = {
-  id: number;
+  id: string;
   itemName?: string;
   itemType?: string;
   location?: string;
@@ -53,7 +53,7 @@ function AdminDashboardPage() {
     loadReports();
   }, []);
 
-  const handleStatusChange = async (id: number, status: string) => {
+  const handleStatusChange = async (id: string, status: string) => {
     try {
       await updateReportStatus(id, status);
       loadReports();

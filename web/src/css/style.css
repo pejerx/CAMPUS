@@ -867,15 +867,39 @@ body {
   }
 }
 
-.admin-status-select {
-  width: 100%;
+/*ADMIN*/
+
+.admin-action-row {
+  display: flex;
+  gap: 10px;
   margin-top: 12px;
-  padding: 11px 12px;
+}
+
+.admin-approve-btn,
+.admin-reject-btn {
+  flex: 1;
+  border: none;
+  padding: 11px;
   border-radius: 999px;
-  border: 1px solid #ddd;
-  background: white;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
+}
+
+.admin-approve-btn {
+  background: #2ecc71;
+  color: white;
+}
+
+.admin-reject-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.admin-final-status {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #666;
 }
 
 .floating-dots span:nth-child(1) { width: 15px; height: 15px; top: 17%; left: 23%; }

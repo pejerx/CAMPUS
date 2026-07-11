@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import cit.edu.garol.campus.features.dashboard.components.BottomNavigationBar
 import cit.edu.garol.campus.features.dashboard.components.HomeTopBar
 import cit.edu.garol.campus.features.dashboard.components.ItemGridCard
-import cit.edu.garol.campus.features.dashboard.components.ReportItemDialog
+import cit.edu.garol.campus.features.report.components.ReportItemDialog
 import cit.edu.garol.campus.features.dashboard.components.UserSideBar
 import cit.edu.garol.campus.features.dashboard.model.ItemCardData
 import kotlinx.coroutines.launch

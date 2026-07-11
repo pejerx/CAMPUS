@@ -15,10 +15,10 @@ import { useNavigate } from "react-router-dom";
 import "../css/style.css";
 import "../css/component_style.css";
 
-import { getReportedItems, updateReportStatus } from "./admin_api";
+import { approveReport, getReportedItems, rejectReport } from "./admin_api";
 
 type ItemReport = {
-  id: number;
+  id: string;
   userId?: string;
   reportType?: string;
   itemName?: string;
@@ -34,7 +34,7 @@ function AdminReportedItemsPage() {
 
   const [reports, setReports] = useState<ItemReport[]>([]);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("Under Review");
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -56,14 +56,25 @@ function AdminReportedItemsPage() {
     loadReportedItems();
   }, []);
 
-  const handleStatusChange = async (id: number, status: string) => {
+  const handleApprove = async (id: string) => {
     try {
-      await updateReportStatus(id, status);
+      await approveReport(id);
       await loadReportedItems();
-      alert("Item status updated successfully.");
+      alert("Item approved. It is now visible to users.");
     } catch (error) {
       console.error(error);
-      alert("Failed to update item status.");
+      alert("Failed to approve item.");
+    }
+  };
+
+  const handleReject = async (id: string) => {
+    try {
+      await rejectReport(id);
+      await loadReportedItems();
+      alert("Item rejected.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to reject item.");
     }
   };
 
@@ -146,41 +157,52 @@ function AdminReportedItemsPage() {
         <section className="explore-header">
           <div>
             <h1>Reported Items</h1>
-            <p>
-              Review user-submitted lost and found reports before making them
-              public.
-            </p>
+            <p>Approve or reject submitted lost and found reports.</p>
           </div>
 
           <div className="explore-tabs">
             <button
-              className={statusFilter === "All" ? "active" : ""}
-              onClick={() => setStatusFilter("All")}
+                className={statusFilter === "Under Review" ? "active" : ""}
+                onClick={() => setStatusFilter("Under Review")}
             >
-              All
+                Under Review
             </button>
 
             <button
-              className={statusFilter === "Under Review" ? "active" : ""}
-              onClick={() => setStatusFilter("Under Review")}
+                className={statusFilter === "Unclaimed" ? "active" : ""}
+                onClick={() => setStatusFilter("Unclaimed")}
             >
-              Under Review
+                Unclaimed
             </button>
 
             <button
-              className={statusFilter === "Unclaimed" ? "active" : ""}
-              onClick={() => setStatusFilter("Unclaimed")}
+                className={statusFilter === "Pending Claim" ? "active" : ""}
+                onClick={() => setStatusFilter("Pending Claim")}
             >
-              Unclaimed
+                Pending Claim
             </button>
 
             <button
-              className={statusFilter === "Claimed" ? "active" : ""}
-              onClick={() => setStatusFilter("Claimed")}
+                className={statusFilter === "Claimed" ? "active" : ""}
+                onClick={() => setStatusFilter("Claimed")}
             >
-              Claimed
+                Claimed
             </button>
-          </div>
+
+            <button
+                className={statusFilter === "Rejected" ? "active" : ""}
+                onClick={() => setStatusFilter("Rejected")}
+            >
+                Rejected
+            </button>
+
+            <button
+                className={statusFilter === "All" ? "active" : ""}
+                onClick={() => setStatusFilter("All")}
+            >
+                All
+            </button>
+            </div>
         </section>
 
         <section className="explore-grid">
@@ -221,23 +243,29 @@ function AdminReportedItemsPage() {
                     </span>
 
                     <span className="explore-status">
-                      {item.status || "Under Review"}
+                      {item.status === "Under Review" ? (
+                        <div className="admin-action-row">
+                            <button
+                            className="admin-approve-btn"
+                            onClick={() => handleApprove(item.id)}
+                            >
+                            Approve
+                            </button>
+
+                            <button
+                            className="admin-reject-btn"
+                            onClick={() => handleReject(item.id)}
+                            >
+                            Reject
+                            </button>
+                        </div>
+                        ) : (
+                        <p className="admin-final-status">
+                            Current status: {item.status}
+                        </p>
+                        )}
                     </span>
                   </div>
-
-                  <select
-                    className="admin-status-select"
-                    value={item.status || "Under Review"}
-                    onChange={(e) =>
-                      handleStatusChange(item.id, e.target.value)
-                    }
-                  >
-                    <option value="Under Review">Under Review</option>
-                    <option value="Unclaimed">Unclaimed</option>
-                    <option value="Pending Claim">Pending Claim</option>
-                    <option value="Claimed">Claimed</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
                 </div>
               </div>
             );

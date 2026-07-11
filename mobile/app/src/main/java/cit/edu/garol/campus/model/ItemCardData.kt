@@ -1,4 +1,8 @@
 package cit.edu.garol.campus.model
 
-class ItemCardData {
-}
+data class ItemCardData(
+    val date: String,
+    val status: String,
+    val itemType: String,
+    val itemName: String
+)
