@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../css/style.css";
-import LoginModal from "../components/login_modal";
-import RegistrationModal from "../components/registration_modal";
+import LoginModal from "../auth/login_modal";
+import RegistrationModal from "../auth/registration_modal";
 
 function DashboardPage() {
   const [showLogin, setShowLogin] = useState(false);

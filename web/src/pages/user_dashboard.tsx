@@ -13,7 +13,7 @@ import { useState } from "react";
 import "../css/style.css";
 import { useNavigate } from "react-router-dom";
 import "../css/component_style.css";
-import ReportItemModal from "../components/report_item_form";
+import ReportItemModal from "../item-report/report_item_form";
 
 function UserDashboardPage() {
   const navigate = useNavigate();
@@ -59,11 +59,8 @@ function UserDashboardPage() {
           <button className="active">
             <IconHome size={17} /> Home
           </button>
-          <button>
-            <IconSearch size={17} /> Lost Items
-          </button>
-          <button>
-            <IconPackage size={17} /> Found Items
+          <button onClick={() => navigate("/explore")}>
+            <IconPackage size={17} /> Explore
           </button>
           <button onClick={() => setShowReportModal(true)}>
             <IconReport size={17} /> Report Item
@@ -107,8 +104,12 @@ function UserDashboardPage() {
                 onClick={() => {
                   if (card.title === "Report") {
                     setShowReportModal(true);
-              }
-            }}
+                  }
+
+                  if (card.title === "Lost Items" || card.title === "Found Items") {
+                    navigate("/explore");
+                  }
+                }}
       >
                 <span>{card.title}</span>
                 <div>{card.icon}</div>

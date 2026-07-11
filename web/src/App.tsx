@@ -4,6 +4,9 @@ import '@shoelace-style/shoelace/dist/themes/light.css';
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
 import DashboardPage from "./pages/dashboard_page";
 import UserDashboardPage from "./pages/user_dashboard";
+import AdminDashboardPage from "./admin/admin_dashboard";
+import ExplorePage from "./item-report/explore_page";
+import AdminReportedItemsPage from "./admin/admin_reported_items";
 
 setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/');
 
@@ -13,6 +16,11 @@ function App() {
     <Routes>
       <Route path="/" element={<DashboardPage />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />
+      <Route path="/explore" element={<ExplorePage />} />
+    
+      <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+      <Route path="/admin-reported-items" element={<AdminReportedItemsPage />} />
+      
     </Routes>
   );
 }
