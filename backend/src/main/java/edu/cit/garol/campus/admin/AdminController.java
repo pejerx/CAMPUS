@@ -23,10 +23,17 @@ public class AdminController {
         this.itemReportRepository = itemReportRepository;
     }
 
+    /*
+     * ==========================================================
+     * ADMIN LOGIN
+     * ==========================================================
+     */
+
     @PostMapping("/login")
     public ResponseEntity<?> loginAdmin(
             @RequestBody AdminLoginRequest request
     ) {
+
         if (request == null) {
             return ResponseEntity
                     .badRequest()
@@ -67,6 +74,12 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    /*
+     * ==========================================================
+     * REPORTS
+     * ==========================================================
+     */
+
     @GetMapping("/reports")
     public ResponseEntity<List<ItemReport>> getAllReports() {
         return ResponseEntity.ok(
@@ -81,20 +94,136 @@ public class AdminController {
         );
     }
 
-    @PutMapping("/reports/{id}/status")
-    public ResponseEntity<ItemReport> updateReportStatus(
-            @PathVariable String id,
-            @RequestBody AdminStatusRequest request
-    ) {
+    /*
+     * ==========================================================
+     * APPROVE REPORT
+     *
+     * Under Review -> Unclaimed
+     * ==========================================================
+     */
+
+    @PutMapping("/reports/{id}/approve")
+        public ResponseEntity<?> approveReport(
+                @PathVariable int id
+        ) {
+
         ItemReport report = itemReportRepository
                 .findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException(
-                                "Item report not found"
-                        )
-                );
+                .orElseThrow(() ->
+                        new RuntimeException("Item report not found"));
 
-        report.setStatus(request.getStatus());
+        if (!"Under Review".equals(report.getStatus())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Only reports under review can be approved.");
+        }
+
+        report.setStatus("Unclaimed");
+
+        ItemReport updatedReport =
+                itemReportRepository.save(report);
+
+        return ResponseEntity.ok(updatedReport);
+    }
+
+    /*
+     * ==========================================================
+     * REJECT REPORT
+     *
+     * Under Review -> Rejected
+     * ==========================================================
+     */
+
+    @PutMapping("/reports/{id}/reject")
+        public ResponseEntity<?> rejectReport(
+                @PathVariable int id
+        ) {
+
+        ItemReport report = itemReportRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Item report not found"));
+
+        if (!"Under Review".equals(report.getStatus())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Only reports under review can be rejected.");
+        }
+
+        report.setStatus("Rejected");
+
+        ItemReport updatedReport =
+                itemReportRepository.save(report);
+
+        return ResponseEntity.ok(updatedReport);
+    }
+
+    /*
+     * ==========================================================
+     * UPDATE PUBLIC STATUS
+     *
+     * Allowed transitions:
+     *
+     * Unclaimed
+     * Pending Claim
+     * Claimed
+     *
+     * Under Review and Rejected cannot be changed here.
+     * ==========================================================
+     */
+
+    @PutMapping("/reports/{id}/status")
+        public ResponseEntity<?> updateReportStatus(
+                @PathVariable int id,
+                @RequestBody AdminStatusRequest request
+        ) {
+
+        ItemReport report = itemReportRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Item report not found"));
+
+        String currentStatus = report.getStatus();
+
+        /*
+         * Reports must first be approved.
+         */
+        if ("Under Review".equals(currentStatus)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Please approve the report first.");
+        }
+
+        /*
+         * Rejected reports cannot be modified.
+         */
+        if ("Rejected".equals(currentStatus)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Rejected reports cannot be updated.");
+        }
+
+        String newStatus = request.getStatus();
+
+        if (newStatus == null || newStatus.isBlank()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Status is required.");
+        }
+
+        switch (newStatus) {
+
+            case "Unclaimed":
+            case "Pending Claim":
+            case "Claimed":
+                report.setStatus(newStatus);
+                break;
+
+            default:
+                return ResponseEntity
+                        .badRequest()
+                        .body("Invalid status.");
+        }
 
         ItemReport updatedReport =
                 itemReportRepository.save(report);

@@ -12,15 +12,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/reports")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ItemReportController {
 
     private final ItemReportRepository itemReportRepository;
 
-    public ItemReportController(ItemReportRepository itemReportRepository) {
+    public ItemReportController(
+            ItemReportRepository itemReportRepository
+    ) {
         this.itemReportRepository = itemReportRepository;
     }
 
@@ -39,9 +42,20 @@ public class ItemReportController {
 
             if (image != null && !image.isEmpty()) {
                 String uploadDir = "uploads/";
+
                 Files.createDirectories(Paths.get(uploadDir));
 
-                String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                String originalFileName = image.getOriginalFilename();
+
+                if (originalFileName == null ||
+                        originalFileName.isBlank()) {
+
+                    originalFileName = "uploaded-image";
+                }
+
+                String fileName =
+                        UUID.randomUUID() + "_" + originalFileName;
+
                 Path filePath = Paths.get(uploadDir + fileName);
 
                 Files.write(filePath, image.getBytes());
@@ -50,6 +64,7 @@ public class ItemReportController {
             }
 
             ItemReport report = new ItemReport();
+
             report.setUserId(userId);
             report.setReportType(reportType);
             report.setItemName(itemName);
@@ -57,52 +72,96 @@ public class ItemReportController {
             report.setDescription(description);
             report.setLocation(location);
             report.setImagePath(imagePath);
-
-            // User-submitted reports should NOT be public immediately.
+            report.setCreatedAt(LocalDateTime.now());
             report.setStatus("Under Review");
 
-            ItemReport savedReport = itemReportRepository.save(report);
+            ItemReport savedReport =
+                    itemReportRepository.save(report);
 
             return ResponseEntity.ok(savedReport);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+
+            return ResponseEntity
+                    .internalServerError()
+                    .build();
         }
     }
 
     @GetMapping
     public ResponseEntity<List<ItemReport>> getAllReports() {
-        return ResponseEntity.ok(itemReportRepository.findAll());
+        return ResponseEntity.ok(
+                itemReportRepository.findAll()
+        );
     }
 
     @GetMapping("/public")
-    public ResponseEntity<List<ItemReport>> getPublicReports() {
+        public ResponseEntity<List<ItemReport>> getPublicReports() {
+
         List<String> publicStatuses = List.of(
                 "Unclaimed",
                 "Pending Claim",
                 "Claimed"
         );
 
-        return ResponseEntity.ok(itemReportRepository.findByStatusIn(publicStatuses));
-    }
+        return ResponseEntity.ok(
+                itemReportRepository.findByStatusIn(publicStatuses)
+        );
+        }
 
-    @GetMapping("/uploads/{fileName}")
-    public ResponseEntity<Resource> getUploadedImage(@PathVariable String fileName) {
+        /*
+        * User - View only their own reports.
+        */
+        @GetMapping("/user/{userId}")
+        public ResponseEntity<List<ItemReport>> getUserReports(
+                @PathVariable String userId
+        ) {
+
+        return ResponseEntity.ok(
+                itemReportRepository.findByUserId(userId)
+        );
+
+        }
+
+    @GetMapping("/uploads/{fileName:.+}")
+    public ResponseEntity<Resource> getUploadedImage(
+            @PathVariable String fileName
+    ) {
         try {
-            Path imagePath = Paths.get("uploads").resolve(fileName);
-            Resource resource = new UrlResource(imagePath.toUri());
+            Path imagePath = Paths.get("uploads")
+                    .resolve(fileName)
+                    .toAbsolutePath()
+                    .normalize();
 
-            if (!resource.exists()) {
+            Resource resource =
+                    new UrlResource(imagePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
                 return ResponseEntity.notFound().build();
             }
 
+            String contentType =
+                    Files.probeContentType(imagePath);
+
+            MediaType mediaType =
+                    MediaType.APPLICATION_OCTET_STREAM;
+
+            if (contentType != null) {
+                mediaType =
+                        MediaType.parseMediaType(contentType);
+            }
+
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
+                    .contentType(mediaType)
                     .body(resource);
 
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+
+            return ResponseEntity
+                    .internalServerError()
+                    .build();
         }
     }
 }
