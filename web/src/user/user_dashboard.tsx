@@ -1,11 +1,5 @@
 import {
-  IconBell,
   IconChevronDown,
-  IconClipboardText,
-  IconHome,
-  IconLogout,
-  IconPackage,
-  IconReport,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -15,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/component_style.css";
 import ReportItemModal from "../item-report/report_item_form";
 import UserSidebar from "./component_user_sidebar";
+import NotificationDropdown from "../notification/component_notifcation_dropdown";
 
 function UserDashboardPage() {
   const navigate = useNavigate();
@@ -57,15 +52,12 @@ function UserDashboardPage() {
             <IconSearch size={18} />
           </div>
 
-          <div className="lf-header-right">
-            <IconBell size={21} />
-
+          <NotificationDropdown />
             <div className="lf-user-chip">
               <div className="lf-small-avatar">U</div>
               <span>User</span>
               <IconChevronDown size={16} />
             </div>
-          </div>
         </header>
 
         <section className="lf-hero">

@@ -210,7 +210,6 @@ function ClaimDetailsModal({
                 >
                 Approve
                 </button>
-
             </div>
 
             ) : (
@@ -223,15 +222,10 @@ function ClaimDetailsModal({
                 >
                 Close
                 </button>
-
             </div>
-
             )}
-
         </div>
-
         </div>
-
     </div>
     </div>
   );

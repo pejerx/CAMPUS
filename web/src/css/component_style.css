@@ -634,3 +634,129 @@
   }
 
 }
+
+/* ==============================
+   Notification Item
+============================== */
+
+.notification-item {
+  padding: 16px;
+  border-bottom: 1px solid #ececec;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: #f8f8f8;
+}
+
+.notification-item.unread {
+  background: #fff8e7;
+}
+
+.notification-content h4 {
+  margin: 0;
+  color: #8C1D40;
+  font-size: 15px;
+}
+
+.notification-content p {
+  margin: 8px 0;
+  color: #555;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.notification-content small {
+  color: #888;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFC627;
+}
+
+/* =====================================
+   Notification Dropdown
+===================================== */
+
+.notification-dropdown-container {
+  position: relative;
+}
+
+.notification-bell-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #8C1D40;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 380px;
+  max-height: 500px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  z-index: 9999;
+}
+
+.notification-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px;
+  border-bottom: 1px solid #ececec;
+}
+
+.notification-dropdown-header h3 {
+  margin: 0;
+  color: #8C1D40;
+}
+
+.notification-read-all {
+  border: none;
+  background: none;
+  color: #8C1D40;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.notification-read-all:hover {
+  text-decoration: underline;
+}
+
+.notification-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #888;
+}

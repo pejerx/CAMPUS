@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import edu.cit.garol.campus.notification.Notification;
+import edu.cit.garol.campus.notification.NotificationRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/api/claim-requests")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -23,18 +26,19 @@ public class ClaimRequestController {
 
     private final ClaimRequestRepository claimRequestRepository;
     private final ItemReportRepository itemReportRepository;
+    private final NotificationRepository notificationRepository;
 
     public ClaimRequestController(
             ClaimRequestRepository claimRequestRepository,
-            ItemReportRepository itemReportRepository
+            ItemReportRepository itemReportRepository,
+            NotificationRepository notificationRepository
+            
     ) {
         this.claimRequestRepository = claimRequestRepository;
         this.itemReportRepository = itemReportRepository;
+        this.notificationRepository = notificationRepository;
     }
 
-    /*
-     * Submit a claim request.
-     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> submitClaimRequest(
 
@@ -229,6 +233,53 @@ public class ClaimRequestController {
                     claimRequest
             );
 
+            Notification notification = new Notification();
+
+                notification.setUserId(
+                        claimRequest.getClaimantId()
+                );
+
+                if ("Approved".equalsIgnoreCase(status)) {
+
+                notification.setTitle(
+                        "Claim Request Approved"
+                );
+
+                notification.setMessage(
+                        "Your claim request has been approved. "
+                        + "Please proceed to the Lost and Found Office "
+                        + "for identity verification and item release. "
+                        + "Kindly bring your school ID and any supporting "
+                        + "documents that may help verify ownership."
+                );
+
+                } else if ("Rejected".equalsIgnoreCase(status)) {
+
+                notification.setTitle(
+                        "Claim Request Rejected"
+                );
+
+                notification.setMessage(
+                        "Your claim request has been rejected. "
+                        + "The submitted proof of ownership "
+                        + "was insufficient to verify ownership. "
+                        + "If you believe this decision was made in error, "
+                        + "please visit the Lost and Found Office "
+                        + "for further assistance."
+                );
+
+                }
+
+                notification.setRead(false);
+
+                notification.setCreatedAt(
+                        LocalDateTime.now()
+                );
+
+                notificationRepository.save(
+                        notification
+                );
+
             /*
              * If approved,
              * mark the item as claimed.
@@ -245,8 +296,8 @@ public class ClaimRequestController {
             }
 
             return ResponseEntity.ok(
-                    claimRequest
-            );
+                "Claim request updated successfully."
+        );
 
         } catch (Exception exception) {
 
