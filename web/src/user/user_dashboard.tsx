@@ -14,6 +14,7 @@ import "../css/style.css";
 import { useNavigate } from "react-router-dom";
 import "../css/component_style.css";
 import ReportItemModal from "../item-report/report_item_form";
+import UserSidebar from "./component_user_sidebar";
 
 function UserDashboardPage() {
   const navigate = useNavigate();
@@ -48,33 +49,7 @@ function UserDashboardPage() {
 
   return (
     <div className="lf-dashboard">
-      <aside className="lf-sidebar">
-        <div className="lf-profile">
-          <div className="lf-avatar">U</div>
-          <small>Welcome Back</small>
-          <h3>Hi, User!</h3>
-        </div>
-
-        <nav className="lf-menu">
-          <button className="active">
-            <IconHome size={17} /> Home
-          </button>
-          <button onClick={() => navigate("/explore")}>
-            <IconPackage size={17} /> Explore
-          </button>
-          <button onClick={() => setShowReportModal(true)}>
-            <IconReport size={17} /> Report Item
-          </button>
-          <button>
-            <IconClipboardText size={17} /> My Reports
-          </button>
-        </nav>
-
-        <button className="lf-logout" onClick={handleLogout}>
-          <IconLogout size={17} /> Log Out
-        </button>
-      </aside>
-
+      <UserSidebar active="home" onReportClick={() => setShowReportModal(true)} />
       <main className="lf-main">
         <header className="lf-header">
           <div className="lf-search">

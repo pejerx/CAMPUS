@@ -79,7 +79,6 @@ function RegistrationModal({ onClose, onLogin }: RegistrationModalProps) {
           </option>
           <option value="student">Student</option>
           <option value="faculty_member">Faculty Member</option>
-          <option value="administrator">Administrator</option>
           <option value="support_staff">Support Staff</option>
           <option value="non_support_staff">Non-Support Staff</option>
         </select>

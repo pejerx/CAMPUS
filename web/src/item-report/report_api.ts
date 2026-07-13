@@ -38,3 +38,15 @@ export async function createReportItem(data: CreateReportItemData) {
 
   return response.json();
 }
+
+export async function getMyReports(userId: string) {
+  const response = await fetch(
+    `http://localhost:8080/api/reports/user/${userId}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch your reports.");
+  }
+
+  return response.json();
+}

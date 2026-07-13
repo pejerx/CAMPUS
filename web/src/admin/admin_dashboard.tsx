@@ -2,11 +2,6 @@
 import {
   IconBell,
   IconChevronDown,
-  IconClipboardText,
-  IconHome,
-  IconLogout,
-  IconPackage,
-  IconReport,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -15,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../css/style.css";
 import "../css/component_style.css";
+import AdminSidebar from "./component_admin_sidebar";
 import { getAllReports, updateReportStatus } from "./admin_api";
 
 type ItemReport = {
@@ -33,11 +29,7 @@ function AdminDashboardPage() {
   const [reports, setReports] = useState<ItemReport[]>([]);
   const [search, setSearch] = useState("");
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("admin");
-    navigate("/", { replace: true });
-  };
+  
 
   const loadReports = async () => {
     try {
@@ -55,7 +47,7 @@ function AdminDashboardPage() {
 
   const handleStatusChange = async (id: number, status: string) => {
     try {
-      await updateReportStatus(id, status);
+      await updateReportStatus(String(id), status as any);
       loadReports();
     } catch (error) {
       console.error(error);
@@ -77,36 +69,7 @@ function AdminDashboardPage() {
 
   return (
     <div className="lf-dashboard">
-      <aside className="lf-sidebar">
-        <div className="lf-profile">
-          <div className="lf-avatar">A</div>
-          <small>Welcome Back</small>
-          <h3>Hi, Admin!</h3>
-        </div>
-
-        <nav className="lf-menu">
-          <button className="active">
-            <IconHome size={17} /> Dashboard
-          </button>
-
-          <button onClick={() => navigate("/admin-reported-items")}>
-            <IconReport size={17} /> Reported Items
-        </button>
-
-          <button>
-            <IconClipboardText size={17} /> Claim Requests
-          </button>
-
-          <button>
-            <IconPackage size={17} /> Items
-          </button>
-        </nav>
-
-        <button className="lf-logout" onClick={handleLogout}>
-          <IconLogout size={17} /> Log Out
-        </button>
-      </aside>
-
+      <AdminSidebar active="dashboard" />
       <main className="lf-main">
         <header className="lf-header">
           <div className="lf-search">

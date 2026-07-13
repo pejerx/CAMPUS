@@ -120,12 +120,21 @@ body {
 }
 
 .lf-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
   width: 260px;
-  min-height: 100vh;
+  height: 100vh;
+
   background: #eefbea;
   padding: 40px 24px;
+
   display: flex;
   flex-direction: column;
+
+  overflow-y: auto;
+  z-index: 1000;
 }
 
 .lf-profile {
@@ -196,7 +205,13 @@ body {
 
 .lf-main {
   flex: 1;
+  margin-left: 260px;
+  width: calc(100% - 260px);
+
+  min-height: 100vh;
+
   padding: 42px 48px;
+
   overflow-y: auto;
 }
 
@@ -876,6 +891,352 @@ body {
   background: white;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* ===========================================
+   CLAIM SUCCESS PAGE
+=========================================== */
+
+.claim-success-page{
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#f7f7f7;
+
+    padding:30px;
+
+}
+
+.claim-success-card{
+
+    width:600px;
+    max-width:100%;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:45px;
+
+    text-align:center;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.12);
+
+}
+
+.claim-success-icon{
+
+    color:#8C1D40;
+
+    margin-bottom:25px;
+
+}
+
+.claim-success-card h1{
+    color:#8C1D40;
+    margin-bottom:20px;
+}
+
+.claim-success-card p{
+    color:#555;
+    line-height:1.7;
+    margin-bottom:12px;
+}
+
+.claim-success-card .explore-btn{
+    margin-top:30px;
+    min-width:220px;
+}
+
+/* ===========================================
+   CLAIM REQUEST PAGE
+=========================================== */
+
+.claim-page {
+    min-height: 100vh;
+    background: #f4f4f4;
+    padding: 40px;
+}
+
+.claim-container {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+.claim-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    background: transparent;
+    color: #8C1D40;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    margin-bottom: 20px;
+
+    transition: .2s;
+}
+
+.claim-back-btn:hover {
+    color: #FFC627;
+}
+
+.claim-container h1 {
+    color: #8C1D40;
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+
+.claim-subtitle {
+    color: #666;
+    margin-bottom: 35px;
+}
+
+/* ===========================================
+   TWO COLUMN LAYOUT
+=========================================== */
+
+.claim-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 35px;
+    align-items: start;
+}
+
+/* ===========================================
+   LEFT CARD
+=========================================== */
+
+.claim-item-preview {
+    background: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+
+    position: sticky;
+    top: 30px;
+}
+
+.claim-item-preview img {
+    width: 100%;
+    height: 320px;
+
+    object-fit: cover;
+}
+
+.claim-placeholder {
+    height: 320px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #fafafa;
+
+    font-size: 80px;
+}
+
+.claim-item-preview h2 {
+    padding: 18px 22px 10px;
+    color: #8C1D40;
+}
+
+.claim-item-preview .lf-badge {
+    margin-left: 22px;
+    margin-bottom: 18px;
+}
+
+.claim-item-preview p {
+    padding: 0 22px 18px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.claim-item-preview strong {
+    color: #000;
+}
+
+/* ===========================================
+   FORM
+=========================================== */
+
+.claim-form {
+    background: #FFFFFF;
+    border-radius: 16px;
+
+    padding: 35px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.claim-form label {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    font-weight: 600;
+
+    color: #8C1D40;
+}
+
+.claim-form input,
+.claim-form textarea {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    transition: .2s;
+
+    font-family: inherit;
+}
+
+.claim-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.claim-form input:focus,
+.claim-form textarea:focus {
+
+    outline: none;
+
+    border-color: #8C1D40;
+
+    box-shadow: 0 0 0 3px rgba(140,29,64,.12);
+
+}
+
+.required {
+    color: #d00000;
+}
+
+/* ===========================================
+   IMAGE UPLOAD
+=========================================== */
+
+.claim-upload {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+.claim-upload-btn {
+
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #8C1D40;
+    color: #FFFFFF;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    font-weight: 600;
+
+}
+
+.claim-upload-btn:hover {
+
+    background: #6d1732;
+
+}
+
+.claim-proof-preview {
+
+    width: 240px;
+
+    border-radius: 12px;
+
+    border: 3px solid #FFC627;
+
+}
+
+/* ===========================================
+   BUTTONS
+=========================================== */
+
+.claim-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 15px;
+
+    margin-top: 10px;
+
+}
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media (max-width: 950px) {
+
+    .claim-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .claim-item-preview {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .claim-page {
+        padding: 20px;
+    }
+
+    .claim-form {
+        padding: 24px;
+    }
+
+    .claim-item-preview img,
+    .claim-placeholder {
+        height: 240px;
+    }
+
+    .claim-actions {
+        flex-direction: column;
+    }
+
+    .claim-actions button {
+        width: 100%;
+    }
+
 }
 
 .floating-dots span:nth-child(1) { width: 15px; height: 15px; top: 17%; left: 23%; }
