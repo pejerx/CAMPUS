@@ -2,6 +2,7 @@ package cit.edu.garol.campus.features.admin.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.update
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
 import cit.edu.garol.campus.features.admin.repository.AdminRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -275,6 +276,151 @@ class AdminViewModel(
         }
     }
 
+    fun approveReport(reportId: String) {
+
+        viewModelScope.launch {
+
+            _dashboardUiState.value =
+                _dashboardUiState.value.copy(
+                    isUpdatingStatus = true,
+                    errorMessage = null,
+                    successMessage = null
+                )
+
+            try {
+
+                val response =
+                    repository.approveReport(reportId)
+
+                if (response.isSuccessful) {
+
+                    loadReportedItems()
+
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isUpdatingStatus = false,
+                            successMessage = "Report approved successfully."
+                        )
+
+                } else {
+
+                    val backendMessage =
+                        response.errorBody()
+                            ?.string()
+                            ?.removePrefix("\"")
+                            ?.removeSuffix("\"")
+                            ?.trim()
+
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isUpdatingStatus = false,
+                            errorMessage = backendMessage
+                                ?: "Unable to approve report."
+                        )
+                }
+
+            } catch (e: Exception) {
+
+                _dashboardUiState.value =
+                    _dashboardUiState.value.copy(
+                        isUpdatingStatus = false,
+                        errorMessage = e.message
+                            ?: "Cannot connect to the server."
+                    )
+            }
+        }
+    }
+
+    fun loadPublicReports() {
+        viewModelScope.launch {
+            _dashboardUiState.value =
+                _dashboardUiState.value.copy(
+                    isLoading = true,
+                    errorMessage = null
+                )
+            try {
+                val response =
+                    repository.getPublicReports()
+                if (response.isSuccessful) {
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isLoading = false,
+                            reportedItems =
+                            response.body()
+                                ?: emptyList()
+                        )
+                } else {
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isLoading = false,
+                            errorMessage = "Unable to load public reports."
+                        )
+                }
+            } catch (exception: Exception) {
+                _dashboardUiState.value =
+                    _dashboardUiState.value.copy(
+                        isLoading = false,
+                        errorMessage =
+                        exception.message
+                            ?: "Cannot connect to the server."
+                    )
+            }
+        }
+    }
+    fun rejectReport(reportId: String) {
+
+        viewModelScope.launch {
+
+            _dashboardUiState.value =
+                _dashboardUiState.value.copy(
+                    isUpdatingStatus = true,
+                    errorMessage = null,
+                    successMessage = null
+                )
+
+            try {
+
+                val response =
+                    repository.rejectReport(reportId)
+
+                if (response.isSuccessful) {
+
+                    loadReportedItems()
+
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isUpdatingStatus = false,
+                            successMessage = "Report rejected successfully."
+                        )
+
+                } else {
+
+                    val backendMessage =
+                        response.errorBody()
+                            ?.string()
+                            ?.removePrefix("\"")
+                            ?.removeSuffix("\"")
+                            ?.trim()
+
+                    _dashboardUiState.value =
+                        _dashboardUiState.value.copy(
+                            isUpdatingStatus = false,
+                            errorMessage = backendMessage
+                                ?: "Unable to reject report."
+                        )
+                }
+
+            } catch (e: Exception) {
+
+                _dashboardUiState.value =
+                    _dashboardUiState.value.copy(
+                        isUpdatingStatus = false,
+                        errorMessage = e.message
+                            ?: "Cannot connect to the server."
+                    )
+            }
+        }
+    }
     fun updateReportStatus(
         reportId: String,
         newStatus: String

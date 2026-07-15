@@ -48,7 +48,9 @@ fun AdminDashboardCard(
             )
 
             Text(
-                text = "Location: ${report.lastSeenLocation.ifBlank { "Not specified" }}",
+                text = "Location: ${
+                    report.lastSeenLocation?.takeIf { it.isNotBlank() } ?: "Not specified"
+                }",
                 style = MaterialTheme.typography.bodyMedium
             )
 

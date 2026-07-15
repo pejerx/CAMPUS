@@ -2,6 +2,7 @@ package edu.cit.garol.campus.itemreport;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "item_reports")
@@ -19,7 +20,11 @@ public class ItemReport {
     private String description;
     private String lastSeenLocation;
     private String imagePath;
-    private LocalDateTime createdAt;
+    @JsonFormat(
+        shape = JsonFormat.Shape.STRING,
+        pattern = "yyyy-MM-dd HH:mm:ss"
+)
+private LocalDateTime createdAt;
     private String status = "Under Review";
 
     public ItemReport() {

@@ -16,7 +16,13 @@ import cit.edu.garol.campus.features.dashboard.components.HomeTopBar
 import cit.edu.garol.campus.features.dashboard.components.ItemGridCard
 import cit.edu.garol.campus.features.dashboard.components.ReportItemDialog
 import cit.edu.garol.campus.features.dashboard.components.UserSideBar
-import cit.edu.garol.campus.features.dashboard.model.ItemCardData
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cit.edu.garol.campus.core.network.RetrofitInstance
+import cit.edu.garol.campus.features.admin.repository.AdminRepository
+import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModel
+import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModelFactory
+import cit.edu.garol.campus.features.dashboard.components.ItemDetailsDialog
+import cit.edu.garol.campus.features.admin.model.AdminReportItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,44 +42,40 @@ fun UserDashboardPage(
 
     val currentUserId = "26-0000-000"
 
-    val items = listOf(
-        ItemCardData(
-            date = "4/13/2026",
-            status = "UNCLAIMED",
-            itemType = "FOUND ITEM",
-            itemName = "Wallet"
-        ),
-        ItemCardData(
-            date = "4/13/2026",
-            status = "UNFOUND",
-            itemType = "LOST ITEM",
-            itemName = "Phone"
-        ),
-        ItemCardData(
-            date = "4/13/2026",
-            status = "FOUND",
-            itemType = "LOST ITEM",
-            itemName = "Watch"
-        ),
-        ItemCardData(
-            date = "4/13/2026",
-            status = "CLAIMED",
-            itemType = "FOUND ITEM",
-            itemName = "Laptop"
-        ),
-        ItemCardData(
-            date = "4/13/2026",
-            status = "FOUND",
-            itemType = "FOUND ITEM",
-            itemName = "ID"
-        ),
-        ItemCardData(
-            date = "4/13/2026",
-            status = "UNFOUND",
-            itemType = "LOST ITEM",
-            itemName = "Bag"
+    val viewModel: AdminViewModel = viewModel(
+        factory = AdminViewModelFactory(
+            AdminRepository(
+                RetrofitInstance.adminApi
+            )
         )
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.loadPublicReports()
+    }
+
+    val uiState by viewModel.dashboardUiState.collectAsState()
+
+    var selectedItem by remember {
+        mutableStateOf<AdminReportItem?>(null)
+    }
+
+    LaunchedEffect(uiState.reportedItems) {
+        uiState.reportedItems.forEach {
+            println("REPORT -> $it")
+        }
+    }
+
+    if (selectedItem != null) {
+
+        ItemDetailsDialog(
+            item = selectedItem!!,
+            onDismiss = {
+                selectedItem = null
+            }
+        )
+
+    }
 
     if (showReportDialog) {
         ReportItemDialog(
@@ -180,11 +182,12 @@ fun UserDashboardPage(
                     .fillMaxSize()
                     .background(Color.White)
             ) {
-                items(items) { item ->
+                items(uiState.reportedItems) { item ->
                     ItemGridCard(
                         item = item
                     )
                 }
+
             }
         }
     }

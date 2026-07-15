@@ -5,6 +5,9 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.runtime.remember
+import cit.edu.garol.campus.features.admin.repository.AdminRepository
+import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +39,9 @@ import androidx.compose.ui.unit.sp
 import cit.edu.garol.campus.core.network.RetrofitInstance
 import cit.edu.garol.campus.features.admin.model.AdminLoginRequest
 import cit.edu.garol.campus.features.admin.screens.AdminDashboardScreen
+import cit.edu.garol.campus.features.admin.screens.ReportedItemsScreen
+import cit.edu.garol.campus.features.claimrequest.screens.AdminClaimRequest
+import cit.edu.garol.campus.features.admin.screens.ReviewReportedItemsScreen
 import cit.edu.garol.campus.features.authentication.components.CustomTextField
 import cit.edu.garol.campus.features.authentication.components.LinkText
 import cit.edu.garol.campus.features.authentication.components.PrimaryButton
@@ -74,11 +80,23 @@ fun LoginPage() {
         mutableStateOf(false)
     }
 
+    var showClaimRequests by remember {
+        mutableStateOf(false)
+    }
+
     var showUserDashboard by remember {
         mutableStateOf(false)
     }
 
     var showAdminDashboard by remember {
+        mutableStateOf(false)
+    }
+
+    var showReviewReportedItems by remember {
+        mutableStateOf(false)
+    }
+
+    var showReportedItems by remember {
         mutableStateOf(false)
     }
 
@@ -92,7 +110,45 @@ fun LoginPage() {
 
     val scope = rememberCoroutineScope()
 
+    val adminViewModel = remember {
+        AdminViewModel(
+            AdminRepository(
+                RetrofitInstance.adminApi
+            )
+        )
+    }
+
+
     when {
+        showReviewReportedItems -> {
+            ReviewReportedItemsScreen(
+                viewModel = adminViewModel,
+                onBack = {
+                    showReviewReportedItems = false
+                    showAdminDashboard = true
+                },
+            )
+        }
+
+        showReportedItems -> {
+            ReportedItemsScreen(
+                viewModel = adminViewModel,
+                onBack = {
+                    showReportedItems = false
+                    showAdminDashboard = true
+                }
+            )
+        }
+
+        showClaimRequests -> {
+            AdminClaimRequest(
+                onBack = {
+                    showClaimRequests = false
+                    showAdminDashboard = true
+                }
+            )
+        }
+
         showAdminDashboard -> {
             AdminDashboardScreen(
                 onLogout = {
@@ -101,7 +157,23 @@ fun LoginPage() {
                     idOrEmail = ""
                     password = ""
                     errorMessage = ""
+                },
+
+                onReviewReportedItemsClick = {
+                    showAdminDashboard = false
+                    showReviewReportedItems = true
+                },
+
+                onReportedItemsClick = {
+                    showAdminDashboard = false
+                    showReportedItems = true
+                },
+
+                onClaimRequestsClick = {
+                    showAdminDashboard = false
+                    showClaimRequests = true
                 }
+
             )
         }
 

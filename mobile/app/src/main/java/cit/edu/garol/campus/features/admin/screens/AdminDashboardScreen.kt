@@ -29,7 +29,10 @@ private val AdminGold = Color(0xFFFFCC33)
 
 @Composable
 fun AdminDashboardScreen(
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onReviewReportedItemsClick: () -> Unit,
+    onReportedItemsClick: () -> Unit,
+    onClaimRequestsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -74,17 +77,20 @@ fun AdminDashboardScreen(
 
             AdminDashboardOption(
                 title = "Reported Items",
-                description = "Review lost and found item reports."
+                description = "Review lost and found item reports.",
+                onClick = onReportedItemsClick
             )
 
             AdminDashboardOption(
                 title = "Claim Requests",
-                description = "Review requests submitted by users."
+                description = "Review requests submitted by users.",
+                onClick = onClaimRequestsClick
             )
 
             AdminDashboardOption(
-                title = "Report Status",
-                description = "Approve, reject, or update item statuses."
+                title = "Review Reported Items",
+                description = "Approve, reject, or update item statuses.",
+                onClick = onReviewReportedItemsClick
             )
 
             Spacer(
@@ -114,10 +120,13 @@ fun AdminDashboardScreen(
 @Composable
 private fun AdminDashboardOption(
     title: String,
-    description: String
+    description: String,
+    onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
+        onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
