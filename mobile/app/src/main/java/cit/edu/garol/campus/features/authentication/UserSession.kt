@@ -1,4 +1,7 @@
-package cit.edu.garol.campus.features.authentication
+package cit.edu.garol.campus.authentication
 
-class UserSession {
+import cit.edu.garol.campus.authentication.model.User
+
+object UserSession {
+    var currentUser: User? = null
 }

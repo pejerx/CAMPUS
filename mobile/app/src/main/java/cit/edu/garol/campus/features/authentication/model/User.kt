@@ -1,4 +1,10 @@
-package cit.edu.garol.campus.features.authentication.model
+package cit.edu.garol.campus.authentication.model
 
-class User {
-}
+data class User(
+    val id: String,
+    val firstName: String,
+    val lastName: String,
+    val role: String,
+    val contactNumber: String,
+    val email: String
+)

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cit.edu.garol.campus.authentication.UserSession
 import cit.edu.garol.campus.core.network.RetrofitInstance
 import cit.edu.garol.campus.features.admin.model.AdminLoginRequest
 import cit.edu.garol.campus.features.admin.screens.AdminDashboardScreen
@@ -367,7 +368,7 @@ fun LoginPage() {
                                     when (loginType) {
                                         LoginType.USER -> {
                                             val response =
-                                                RetrofitInstance.authApi.loginUser(
+                                                RetrofitInstance.authApi.login(
                                                     LoginRequest(
                                                         id = idOrEmail.trim(),
                                                         password = password
@@ -375,17 +376,14 @@ fun LoginPage() {
                                                 )
 
                                             if (response.isSuccessful) {
-                                                showUserDashboard = true
-                                            } else {
-                                                errorMessage =
-                                                    readErrorMessage(
-                                                        responseCode = response.code(),
-                                                        errorBody = response
-                                                            .errorBody()
-                                                            ?.string(),
-                                                        defaultMessage =
-                                                        "User login failed."
-                                                    )
+
+                                                val user = response.body()
+                                                if (user != null) {
+                                                    UserSession.currentUser = user
+                                                    showUserDashboard = true
+                                                } else {
+                                                    errorMessage = "Unable to retrieve user information."
+                                                }
                                             }
                                         }
 
