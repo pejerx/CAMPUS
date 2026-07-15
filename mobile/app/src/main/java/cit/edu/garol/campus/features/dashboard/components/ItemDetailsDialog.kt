@@ -25,7 +25,6 @@ import cit.edu.garol.campus.features.admin.model.AdminReportItem
 
 private val Maroon = Color(0xFF800000)
 private val Gold = Color(0xFFFFD700)
-
 @Composable
 fun ItemDetailsDialog(
     item: AdminReportItem,
@@ -33,13 +32,9 @@ fun ItemDetailsDialog(
     onDismiss: () -> Unit,
     onClaimClick: (AdminReportItem) -> Unit
 ) {
-
     AlertDialog(
-
         onDismissRequest = onDismiss,
-
         confirmButton = {
-
             if (item.status == "Unclaimed") {
 
                 Button(
@@ -53,13 +48,9 @@ fun ItemDetailsDialog(
                 ) {
                     Text("Claim Item")
                 }
-
             }
-
         },
-
         dismissButton = {
-
             OutlinedButton(
                 onClick = onDismiss
             ) {
@@ -68,39 +59,29 @@ fun ItemDetailsDialog(
                     color = Maroon
                 )
             }
-
         },
-
         title = {
-
             Text(
                 text = item.itemName,
                 style = MaterialTheme.typography.titleLarge,
                 color = Maroon,
                 fontWeight = FontWeight.Bold
             )
-
         },
-
         text = {
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 AsyncImage(
                     model = if (item.imagePath != null)
                         "$imageBaseUrl/${item.imagePath}"
                     else
                         null,
-
                     contentDescription = item.itemName,
-
                     modifier = Modifier
                         .size(220.dp)
                 )
-
                 Text(
                     text = "Status: ${item.status}",
                     color = Maroon,
@@ -108,14 +89,13 @@ fun ItemDetailsDialog(
                 )
 
                 Text("Report Type: ${item.reportType}")
-
                 Text("Category: ${item.category}")
-
                 Text(
                     text = "Location: ${
                         item.lastSeenLocation ?: "Not specified"
                     }"
                 )
+
                 Text(
                     text = item.description
                 )
@@ -123,7 +103,6 @@ fun ItemDetailsDialog(
                     modifier = Modifier.height(4.dp)
                 )
                 item.createdAt?.let {
-
                     Text(
                         text = "Reported: $it"
                     )

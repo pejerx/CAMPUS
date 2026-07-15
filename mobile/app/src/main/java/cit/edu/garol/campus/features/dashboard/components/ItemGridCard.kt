@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
 
-
 private val Maroon = Color(0xFF800000)
 @Composable
 fun ItemGridCard(
@@ -86,9 +85,7 @@ fun ItemGridCard(
                     Color(0xFFE8E8E8),
                     CircleShape
                 ),
-
             contentAlignment = Alignment.Center
-
         ) {
 
             Text(
@@ -134,11 +131,9 @@ fun ItemGridCard(
                 color = Maroon
             )
         }
-
     }
 
     Divider(
         color = Color(0xFFE0E0E0)
     )
-
 }

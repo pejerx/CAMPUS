@@ -44,7 +44,7 @@ fun UserSideBar(
         Spacer(modifier = Modifier.height(70.dp))
 
         Text(
-            text = "RetrieveIT",
+            text = "CAMPUS",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
@@ -60,12 +60,12 @@ fun UserSideBar(
         )
 
         DrawerMenuItem(
-            text = "Help & Support",
+            text = "My Reported Items",
             onClick = onHelpClick
         )
 
         DrawerMenuItem(
-            text = "About us",
+            text = "Claim Requests",
             onClick = onAboutClick
         )
 

@@ -23,6 +23,8 @@ import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModel
 import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModelFactory
 import cit.edu.garol.campus.features.dashboard.components.ItemDetailsDialog
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
+import cit.edu.garol.campus.features.claimrequest.component.ClaimRequestDialog
+import cit.edu.garol.campus.features.claimrequest.component.ClaimRequestForm
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,23 +62,15 @@ fun UserDashboardPage(
         mutableStateOf<AdminReportItem?>(null)
     }
 
+    var showClaimRequestDialog by remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(uiState.reportedItems) {
         uiState.reportedItems.forEach {
             println("REPORT -> $it")
         }
     }
-
-    if (selectedItem != null) {
-
-        ItemDetailsDialog(
-            item = selectedItem!!,
-            onDismiss = {
-                selectedItem = null
-            }
-        )
-
-    }
-
     if (showReportDialog) {
         ReportItemDialog(
             userId = currentUserId,
@@ -108,6 +102,39 @@ fun UserDashboardPage(
                 showReportDialog = false
             }
         )
+    }
+
+    selectedItem?.let { item ->
+
+        ItemDetailsDialog(
+            item = item,
+            imageBaseUrl = "http://10.0.2.2:8080",
+
+            onDismiss = {
+                selectedItem = null
+            },
+
+            onClaimClick = {
+
+                showClaimRequestDialog = true
+
+            }
+
+        )
+
+        if (showClaimRequestDialog) {
+            ClaimRequestDialog(
+
+                selectedItem = item,
+                onDismiss = {
+                    showClaimRequestDialog = false
+                },
+                onSubmit = {
+                    showClaimRequestDialog = false
+                    selectedItem = null
+                }
+            )
+        }
     }
 
     ModalNavigationDrawer(
@@ -184,7 +211,10 @@ fun UserDashboardPage(
             ) {
                 items(uiState.reportedItems) { item ->
                     ItemGridCard(
-                        item = item
+                        item = item,
+                        onSeeDetails = {
+                            selectedItem = it
+                        }
                     )
                 }
 
