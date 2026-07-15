@@ -11,11 +11,7 @@ class AdminRepository(
     private val adminApi: AdminApi
 ) {
 
-    /*
-     * ==========================================================
-     * ADMIN LOGIN
-     * ==========================================================
-     */
+    /* ADMIN LOGIN */
 
     suspend fun loginAdmin(
         adminId: String,
@@ -30,22 +26,16 @@ class AdminRepository(
         )
     }
 
-    /*
-     * ==========================================================
-     * GET REPORTED ITEMS
-     * ==========================================================
-     */
+    /* GET REPORTED ITEMS */
 
     suspend fun getReportedItems(): Response<List<AdminReportItem>> {
         return adminApi.getReportedItems()
     }
 
     /*
-     * ==========================================================
      * APPROVE REPORT
-     *
+
      * Under Review -> Unclaimed
-     * ==========================================================
      */
 
     suspend fun approveReport(
