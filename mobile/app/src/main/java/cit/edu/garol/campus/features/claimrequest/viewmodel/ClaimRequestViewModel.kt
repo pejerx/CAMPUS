@@ -5,6 +5,13 @@ import androidx.lifecycle.viewModelScope
 import cit.edu.garol.campus.features.claimrequest.model.ClaimRequest
 import cit.edu.garol.campus.features.claimrequest.repository.ClaimRequestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import android.net.Uri
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -12,11 +19,8 @@ import kotlinx.coroutines.launch
 data class ClaimRequestUiState(
 
     val isLoading: Boolean = false,
-
     val claimRequests: List<ClaimRequest> = emptyList(),
-
     val errorMessage: String? = null,
-
     val successMessage: String? = null
 
 )
@@ -33,6 +37,104 @@ class ClaimRequestViewModel(
     val uiState: StateFlow<ClaimRequestUiState> =
         _uiState.asStateFlow()
 
+    /*
+ * ==========================================================
+ * USER - SUBMIT CLAIM REQUEST
+ * ==========================================================
+ */
+
+    fun submitClaimRequest(
+
+        itemReportId: Int,
+
+        claimantId: String,
+
+        claimantName: String,
+
+        claimantEmail: String,
+
+        claimantPhone: String,
+
+        itemDescription: String,
+
+        additionalInformation: String,
+
+        proofImage: MultipartBody.Part?
+
+    ) {
+
+        viewModelScope.launch {
+
+            _uiState.value =
+                _uiState.value.copy(
+                    isLoading = true,
+                    errorMessage = null,
+                    successMessage = null
+                )
+
+            try {
+                val response =
+                    repository.submitClaimRequest(
+
+                        itemReportId =
+                        itemReportId
+                            .toString()
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        claimantId =
+                        claimantId
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        claimantName =
+                        claimantName
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        claimantEmail =
+                        claimantEmail
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        claimantPhone =
+                        claimantPhone
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        itemDescription =
+                        itemDescription
+                            .toRequestBody("text/plain".toMediaType()),
+
+                        additionalInformation =
+                        additionalInformation
+                            .toRequestBody("text/plain".toMediaType()),
+                        proofImage = proofImage
+                    )
+
+                if (response.isSuccessful) {
+                    _uiState.value =
+                        _uiState.value.copy(
+                            isLoading = false,
+                            successMessage =
+                            "Claim request submitted successfully."
+                        )
+
+                } else {
+                    _uiState.value =
+                        _uiState.value.copy(
+                            isLoading = false,
+                            errorMessage =
+                            "Unable to submit claim request."
+                        )
+                }
+
+            } catch (exception: Exception) {
+                _uiState.value =
+                    _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage =
+                        exception.message
+                            ?: "Unable to connect to the server."
+                    )
+            }
+        }
+    }
     /*
      * ==========================================================
      * LOAD CLAIM REQUESTS

@@ -2,6 +2,8 @@ package cit.edu.garol.campus.features.claimrequest.repository
 
 import cit.edu.garol.campus.features.claimrequest.api.ClaimRequestApi
 import cit.edu.garol.campus.features.claimrequest.model.ClaimRequest
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class ClaimRequestRepository(
@@ -80,5 +82,30 @@ class ClaimRequestRepository(
             claimRequestId = claimRequestId,
             status = status
         )
+    }
+
+    suspend fun submitClaimRequest(
+
+        itemReportId: RequestBody,
+        claimantId: RequestBody,
+        claimantName: RequestBody,
+        claimantEmail: RequestBody,
+        claimantPhone: RequestBody,
+        itemDescription: RequestBody,
+        additionalInformation: RequestBody,
+        proofImage: MultipartBody.Part?
+    ): Response<ClaimRequest> {
+        return claimRequestApi.submitClaimRequest(
+            itemReportId = itemReportId,
+            claimantId = claimantId,
+            claimantName = claimantName,
+            claimantEmail = claimantEmail,
+            claimantPhone = claimantPhone,
+            itemDescription = itemDescription,
+            additionalInformation = additionalInformation,
+            proofImage = proofImage
+
+        )
+
     }
 }
