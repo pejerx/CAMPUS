@@ -122,17 +122,11 @@ public class ClaimRequestController {
                     new ClaimRequest();
 
             claimRequest.setItemReport(report);
-
             claimRequest.setClaimantId(claimantId);
-
             claimRequest.setClaimantName(claimantName);
-
             claimRequest.setClaimantEmail(claimantEmail);
-
             claimRequest.setClaimantPhone(claimantPhone);
-
             claimRequest.setItemDescription(itemDescription);
-
             claimRequest.setAdditionalInformation(
                     additionalInformation
             );
