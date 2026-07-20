@@ -50,3 +50,45 @@ export async function getMyReports(userId: string) {
 
   return response.json();
 }
+
+export async function updateReport(
+  id: number,
+  data: {
+    itemName: string;
+    category: string;
+    description: string;
+    location: string;
+  }
+) {
+  const response = await fetch(
+    `http://localhost:8080/api/reports/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update report.");
+  }
+
+  return response.json();
+}
+
+export async function deleteReport(
+  id: number
+) {
+  const response = await fetch(
+    `http://localhost:8080/api/reports/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete report.");
+  }
+}

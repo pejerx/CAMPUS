@@ -4,11 +4,12 @@ import {
   IconLogout,
   IconPackage,
   IconReport,
+  IconFileCheck,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  active: "home" | "explore" | "report" | "my-reports";
+  active: "home" | "explore" | "report" | "my-reports" | "my-claims";
   onReportClick: () => void;
 };
 
@@ -76,6 +77,14 @@ function UserSidebar({ active, onReportClick }: Props) {
         >
           <IconClipboardText size={17} />
           My Reports
+        </button>
+
+        <button
+          className={active === "my-claims" ? "active" : ""}
+          onClick={() => navigate("/my-claims")}
+        >
+          <IconFileCheck size={17} />
+          My Claims
         </button>
       </nav>
 

@@ -124,6 +124,61 @@ public class ItemReportController {
 
         }
 
+        /*
+        * ==========================================================
+        * USER - UPDATE OWN REPORT
+        * ==========================================================
+        */
+
+        @PutMapping("/{id}")
+        public ResponseEntity<ItemReport> updateReport(
+                @PathVariable Integer id,
+                @RequestBody ItemReport updatedReport
+        ) {
+
+        return itemReportRepository.findById(id)
+                .map(report -> {
+
+                        report.setItemName(updatedReport.getItemName());
+                        report.setCategory(updatedReport.getCategory());
+                        report.setDescription(updatedReport.getDescription());
+                        report.setLocation(updatedReport.getLocation());
+
+                        ItemReport savedReport =
+                                itemReportRepository.save(report);
+
+                        return ResponseEntity.ok(savedReport);
+
+                })
+                .orElse(ResponseEntity.notFound().build());
+
+        }
+
+        /*
+        * ==========================================================
+        * USER - DELETE OWN REPORT
+        * ==========================================================
+        */
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<?> deleteReport(
+                @PathVariable Integer id
+        ) {
+
+        ItemReport report = itemReportRepository
+                .findById(id)
+                .orElse(null);
+
+        if (report == null) {
+                return ResponseEntity.notFound().build();
+        }
+
+        itemReportRepository.delete(report);
+
+        return ResponseEntity.ok().build();
+
+        }
+
     @GetMapping("/uploads/{fileName:.+}")
     public ResponseEntity<Resource> getUploadedImage(
             @PathVariable String fileName

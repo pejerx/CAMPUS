@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { PublicItemStatus } from "./admin_api";
 
 type ItemReport = {
@@ -15,12 +16,15 @@ type ItemReport = {
 
 type Props = {
   item: ItemReport;
+
   onApprove: (id: number) => void;
   onReject: (id: number) => void;
   onStatusChange: (
     id: number,
     status: PublicItemStatus
   ) => void;
+  onEdit?: (item: ItemReport) => void;
+  onDelete?: (item: ItemReport) => void;
 };
 
 function AdminReportedItemCard({
@@ -28,6 +32,8 @@ function AdminReportedItemCard({
   onApprove,
   onReject,
   onStatusChange,
+  onEdit,
+  onDelete,
 }: Props) {
   const getImageSource = () => {
     if (!item.imagePath) return "";
@@ -42,6 +48,7 @@ function AdminReportedItemCard({
   const imageSource = getImageSource();
 
   const status = item.status || "Under Review";
+  const [showMenu, setShowMenu] = useState(false);
 
   return (
     <div className="explore-card">
@@ -148,6 +155,59 @@ function AdminReportedItemCard({
             Rejected
           </button>
         )}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "12px",
+          position: "relative",
+        }}
+      >
+
+        <button
+          className="explore-menu-btn"
+          onClick={() =>
+            setShowMenu(!showMenu)
+          }
+        >
+          <IconDotsVertical size={18} />
+        </button>
+
+        {showMenu && (
+
+          <div className="explore-dropdown">
+
+            <button
+              onClick={() => {
+
+                setShowMenu(false);
+
+                onEdit?.(item);
+
+              }}
+            >
+              Edit Report
+            </button>
+
+            <button
+              className="delete"
+              onClick={() => {
+
+                setShowMenu(false);
+
+                onDelete?.(item);
+
+              }}
+            >
+              Delete Report
+            </button>
+
+          </div>
+
+        )}
+
       </div>
     </div>
   );

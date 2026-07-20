@@ -3,6 +3,7 @@ import { useState } from "react";
 import "../css/component_style.css";
 
 import ItemDetailsModal from "../request-claim/component_item_details_modal";
+import { IconDotsVertical } from "@tabler/icons-react";
 
 type ItemReport = {
   id: number;
@@ -23,14 +24,19 @@ type ItemReport = {
 type ExploreCardProps = {
   item: ItemReport;
   variant?: "explore" | "myReports";
+
+  onEdit?: (item: ItemReport) => void;
+  onDelete?: (item: ItemReport) => void;
 };
 
 function ExploreCard({
   item,
   variant = "explore",
+  onEdit,
+  onDelete,
 }: ExploreCardProps) {
   const [showDetails, setShowDetails] = useState(false);
-
+  const [showMenu, setShowMenu] = useState(false);
   const type = item.reportType || item.itemType || "Unknown";
 
   const location =
@@ -90,20 +96,79 @@ function ExploreCard({
             </span>
           </div>
 
-          {type === "Found" ? (
-            <button
-              className="explore-btn"
-              onClick={() => setShowDetails(true)}
-            >
-              Request Claim
-            </button>
-          ) : (
+          {variant === "myReports" ? (
+
+            <div className="explore-actions">
+
             <button
               className="explore-btn outline"
               onClick={() => setShowDetails(true)}
             >
-              View Details
+              View
             </button>
+
+            <div className="explore-menu">
+
+              <button
+                className="explore-menu-btn"
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                <IconDotsVertical size={18} />
+              </button>
+
+              {showMenu && (
+
+                <div className="explore-dropdown">
+
+                  <button
+                    onClick={() => {
+                      setShowMenu(false);
+                      onEdit?.(item);
+                    }}
+                  >
+                    Edit Report
+                  </button>
+
+                  <button
+                    className="delete"
+                    onClick={() => {
+                      setShowMenu(false);
+                      onDelete?.(item);
+                    }}
+                  >
+                    Delete Report
+                  </button>
+
+                </div>
+
+              )}
+
+            </div>
+
+          </div>
+
+          ) : (
+
+            type === "Found" ? (
+
+              <button
+                className="explore-btn"
+                onClick={() => setShowDetails(true)}
+              >
+                Request Claim
+              </button>
+
+            ) : (
+
+              <button
+                className="explore-btn outline"
+                onClick={() => setShowDetails(true)}
+              >
+                View Details
+              </button>
+
+            )
+
           )}
         </div>
       </div>

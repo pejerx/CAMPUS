@@ -1,11 +1,6 @@
 import {
   IconBell,
   IconChevronDown,
-  IconClipboardText,
-  IconHome,
-  IconLogout,
-  IconPackage,
-  IconReport,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -15,9 +10,15 @@ import { useNavigate } from "react-router-dom";
 import "../css/style.css";
 import "../css/component_style.css";
 
+import EditReportedItemModal from "../item-report/edit_reported_item";
 import ReportItemModal from "../item-report/report_item_form";
 import ExploreCard from "../explore/explore_card";
-import { getMyReports } from "../item-report/report_api";
+import UserSidebar from "./component_user_sidebar";
+
+import {
+  getMyReports,
+  deleteReport,
+} from "../item-report/report_api";
 
 type ItemReport = {
   id: number;
@@ -41,6 +42,12 @@ function MyReportsPage() {
   const user = JSON.parse(
     localStorage.getItem("user") || "{}"
   );
+
+  const [editingItem, setEditingItem] =
+    useState<ItemReport | null>(null);
+
+  const [showEditModal, setShowEditModal] =
+    useState(false);
 
   const [reports, setReports] =
     useState<ItemReport[]>([]);
@@ -68,6 +75,43 @@ function MyReportsPage() {
       alert("Failed to load your reports.");
     }
   };
+
+  const handleDelete = async (
+  id: number
+) => {
+
+  const confirmed =
+    window.confirm(
+      "Are you sure you want to delete this report?"
+    );
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+  try {
+
+    await deleteReport(id);
+
+    setReports((previous) =>
+      previous.filter(
+        (report) => report.id !== id
+      )
+    );
+
+    alert(
+      "Report deleted successfully."
+    );
+
+  } catch (error) {
+    console.error(error);
+    alert(
+      "Failed to delete report."
+    );
+  }
+};
 
   useEffect(() => {
     if (user?.id) {
@@ -111,77 +155,10 @@ function MyReportsPage() {
 
   return (
     <div className="lf-dashboard">
-
-      <aside className="lf-sidebar">
-
-        <div className="lf-profile">
-          <div className="lf-avatar">
-            U
-          </div>
-
-          <small>
-            Welcome Back
-          </small>
-
-          <h3>
-            Hi, {user.firstName}!
-          </h3>
-        </div>
-
-        <nav className="lf-menu">
-
-          <button
-            onClick={() =>
-              navigate("/user-dashboard")
-            }
-          >
-            <IconHome size={17} />
-            Home
-          </button>
-
-          <button
-            onClick={() =>
-              navigate("/explore")
-            }
-          >
-            <IconPackage size={17} />
-            Explore
-          </button>
-
-          <button
-            onClick={() =>
-              setShowReportModal(true)
-            }
-          >
-            <IconReport size={17} />
-            Report Item
-          </button>
-
-          <button className="active">
-            <IconClipboardText
-              size={17}
-            />
-            My Reports
-          </button>
-
-        </nav>
-
-        <button
-          className="lf-logout"
-          onClick={handleLogout}
-        >
-          <IconLogout size={17} />
-          Log Out
-        </button>
-
-      </aside>
-
+      <UserSidebar active="home" onReportClick={() => setShowReportModal(true)} />
       <main className="lf-main">
-
         <header className="lf-header">
-
           <div className="lf-search">
-
             <input
               type="text"
               placeholder="Search my reports..."
@@ -192,13 +169,9 @@ function MyReportsPage() {
                 )
               }
             />
-
             <IconSearch size={18} />
-
           </div>
-
           <div className="lf-header-right">
-
             <IconBell size={21} />
 
             <div className="lf-user-chip">
@@ -206,40 +179,28 @@ function MyReportsPage() {
               <div className="lf-small-avatar">
                 U
               </div>
-
               <span>
                 {user.firstName}
               </span>
-
               <IconChevronDown
                 size={16}
               />
-
             </div>
-
           </div>
-
         </header>
-
         <section className="explore-header">
-
           <div>
-
             <h1>
               My Reports
             </h1>
-
             <p>
               View and track the
               status of all the
               items you have
               reported.
             </p>
-
           </div>
-
           <div className="explore-tabs">
-
             <button
               className={
                 filter === "All"
@@ -288,9 +249,18 @@ function MyReportsPage() {
           {filteredReports.map(
             (item) => (
               <ExploreCard
-                key={item.id}
-                item={item}
-                variant="myReports"
+                  key={item.id}
+                  item={item}
+                  variant="myReports"
+
+                  onEdit={(item) => {
+                      setEditingItem(item);
+                      setShowEditModal(true);
+                  }}
+
+                  onDelete={(item) => {
+                    handleDelete(item.id);
+                }}
               />
             )
           )}
@@ -315,10 +285,23 @@ function MyReportsPage() {
           />
         )}
 
+        {showEditModal && editingItem && (
+            <EditReportedItemModal
+                item={editingItem}
+                onClose={() => {
+                    setShowEditModal(false);
+                    setEditingItem(null);
+                    loadReports();
+                }}
+            />
+        )}
+
       </main>
 
     </div>
   );
-}
+  
+      
 
+}
 export default MyReportsPage;

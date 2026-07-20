@@ -5,29 +5,67 @@
 }
 
 .dashboard-page {
-  min-height: 100vh;
-  background: radial-gradient(circle at center, #252525 0%, #181818 55%, #151515 100%);
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden;
-  position: relative;
+    min-height: 100vh;
+    background:#FAF8F4;
+    color: #222;
+    font-family: "Poppins", sans-serif;
 }
 
-.navbar {
-  height: 125px;
-  padding: 0 13%;
-  background: rgba(20, 20, 20, 0.95);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 5;
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.logo {
-  font-family: Georgia, serif;
-  font-size: 30px;
-  font-weight: 700;
+.navbar-logo {
+    width: 80px;
+    height: 80px;
+    background:white;
+    padding:8px;
+    border-radius:18px;
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.footer-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.navbar{
+    background:#7B1113;
+
+    height:95px;
+
+    padding:0 8%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.15);;
+}
+
+.logo{
+    color:#800000;
+    font-size:30px;
+    font-weight:700;
+}
+
+.logo-subtitle{
+    color:#666;
+    font-size:12px;
+    letter-spacing:1px;
 }
 
 .logo span {
@@ -41,24 +79,23 @@
 }
 
 .nav-links a {
-  color: #aaa;
-  text-decoration: none;
-  font-size: 15px;
-  letter-spacing: 0.5px;
+    color:#F5F5F5;
+    font-weight:500;
+    transition:.3s;
 }
 
 .nav-links a:hover {
-  color: white;
+  color:#D4AF37;
 }
 
 .nav-links button {
-  background: transparent;
-  border: 2px solid #6f7cff;
-  color: white;
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-weight: 700;
-  cursor: pointer;
+    background:#D4AF37;
+    color:#3A2A00;
+    border:none;
+    padding:14px 28px;
+    border-radius:30px;
+    font-weight:700;
+    transition:.3s;
 }
 
 .hero-section {
@@ -74,6 +111,7 @@
 }
 
 .hero-section h2 {
+  color:#7B1113;
   font-size: 52px;
   font-weight: 800;
   margin-bottom: 18px;
@@ -83,26 +121,24 @@
   max-width: 660px;
   font-size: 21px;
   line-height: 1.45;
-  color: #f1f1f1;
+  color:#555;
   margin-bottom: 35px;
 }
 
 .search-btn {
-  background: #6f7cff;
-  color: white;
-  border: none;
-  padding: 17px 38px;
-  border-radius: 35px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
+  background:#7B1113;
+  color:white;
+  border:none;
+  border-radius:12px;
+  padding:18px 40px;
+  transition:.3s;
 }
 
 .floating-dots span {
   position: absolute;
   border-radius: 50%;
-  background: #6f7cff;
-  opacity: 0.25;
+  background:#D4AF37;
+  opacity: 0.18;
   z-index: 1;
 }
 /*________________*/
@@ -349,13 +385,22 @@ body {
 }
 
 .lf-item-image {
-  height: 95px;
-  border-radius: 15px;
-  background: #f7f7f7;
-  display: grid;
-  place-items: center;
-  font-size: 52px;
-  margin-bottom: 12px;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f5f5f5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lf-item-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .lf-item-card h3 {
@@ -548,7 +593,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 90px 13%;
-  color: #ffffff;
+  color:#7B1113;
   text-align: center;
 }
 
@@ -566,33 +611,40 @@ body {
 }
 
 .how-card {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 35px 24px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 215, 0, 0.25);
-  backdrop-filter: blur(10px);
+  background:#fff;
+  border-radius:18px;
+  padding:35px;
+  box-shadow:
+      0 10px 30px rgba(0,0,0,.08);
+  transition:.3s;
+  border-top:5px solid #D4AF37;
+}
+
+.how-card:hover{
+    transform:translateY(-8px);
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.12);
 }
 
 .how-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  background: #800000;
-  display: grid;
-  place-items: center;
-  font-size: 32px;
-  border: 3px solid #ffd700;
+  width:70px;
+
+  height:70px;
+  border-radius:16px;
+  background:#7B1113;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  margin:0 auto 22px;
 }
 
 .how-card h3 {
-  font-size: 22px;
-  margin-bottom: 12px;
-  color: #ffd700;
+  color:#7B1113;
 }
 
 .how-card p {
-  color: #dddddd;
+  color: #666;
   line-height: 1.6;
 }
 
@@ -670,6 +722,7 @@ body {
   z-index: 2;
   padding: 45px 13%;
   text-align: center;
+  background:#7B1113;
   color: #ffffff;
   border-top: 1px solid rgba(255, 215, 0, 0.25);
 }
@@ -771,7 +824,8 @@ body {
 .explore-card {
   background: white;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 }
 
 .explore-image {
@@ -833,6 +887,22 @@ body {
   font-size: 13px;
   font-weight: 700;
   color: #333;
+}
+
+.explore-menu {
+  position: relative;
+}
+
+.explore-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  overflow: hidden;
+  z-index: 1000;
 }
 
 .explore-btn {
@@ -912,7 +982,6 @@ body {
 }
 
 .claim-success-card{
-
     width:600px;
     max-width:100%;
 
@@ -929,11 +998,8 @@ body {
 }
 
 .claim-success-icon{
-
     color:#8C1D40;
-
     margin-bottom:25px;
-
 }
 
 .claim-success-card h1{
@@ -1237,6 +1303,156 @@ body {
         width: 100%;
     }
 
+}
+
+/* ==========================================================
+   CLAIM REQUEST PAGE
+========================================================== */
+
+.claim-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.claim-header {
+  margin-bottom: 30px;
+}
+
+.claim-header h1 {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.claim-header p {
+  color: #666;
+}
+
+.back-btn {
+  border: none;
+  background: transparent;
+  color: #800000;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.claim-card {
+  display: flex;
+  gap: 30px;
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 5px 18px rgba(0,0,0,.08);
+  margin-bottom: 30px;
+}
+
+.claim-image {
+  width: 320px;
+  height: 320px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.claim-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.claim-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 90px;
+}
+
+.claim-details {
+  flex: 1;
+}
+
+.claim-details h2 {
+  margin: 12px 0;
+  font-size: 28px;
+}
+
+.claim-details p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.claim-form {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+.claim-form label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.claim-form textarea,
+.claim-form input[type="text"],
+.claim-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.claim-form textarea {
+  resize: vertical;
+}
+
+.claim-preview {
+  margin-top: 18px;
+}
+
+.claim-preview img {
+  width: 220px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.claim-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.claim-actions button {
+  padding: 12px 26px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.cancel-btn {
+  background: #e6e6e6;
+}
+
+.submit-btn {
+  background: #800000;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #670000;
+}
+
+.cancel-btn:hover {
+  background: #d5d5d5;
 }
 
 .floating-dots span:nth-child(1) { width: 15px; height: 15px; top: 17%; left: 23%; }

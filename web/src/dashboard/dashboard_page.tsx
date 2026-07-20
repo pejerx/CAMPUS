@@ -10,9 +10,17 @@ function DashboardPage() {
   return (
     <div className="dashboard-page">
       <nav className="navbar">
-        <h1 className="logo">
-          CAMPUS<span>.</span>
-        </h1>
+        <div className="logo-container">
+          <img
+            src="./public/campus-logo.png"
+            alt="CAMPUS Logo"
+            className="navbar-logo"
+          />
+          <h1 className="logo">
+            CAMPUS
+          </h1>
+
+        </div>
 
         <div className="nav-links">
           <a href="#search">Search Items</a>
@@ -142,10 +150,13 @@ function DashboardPage() {
       </section>
 
       <footer className="footer">
-        <h2>
-          CAMPUS<span>.</span>
-        </h2>
-
+        <div className="footer-logo-container">
+          <img
+            src="./public/campus-logo.png"
+            alt="CAMPUS Logo"
+            className="footer-logo"
+          />
+    </div>
         <div className="footer-links">
           <a href="#search">Home</a>
           <a href="#guidelines">Guidelines</a>

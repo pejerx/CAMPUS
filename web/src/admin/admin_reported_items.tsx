@@ -11,6 +11,8 @@ import "../css/component_style.css";
 
 import AdminSidebar from "./component_admin_sidebar";
 import AdminReportedItemCard from "./component_reported_item_card";
+import EditReportedItemModal from "../item-report/edit_reported_item";
+
 
 import {
   getReportedItems,
@@ -19,6 +21,7 @@ import {
   updateReportStatus,
   PublicItemStatus,
 } from "./admin_api";
+import { deleteReport } from "../item-report/report_api";
 
 type ItemReport = {
   id: number;
@@ -35,7 +38,11 @@ type ItemReport = {
 function AdminReportedItemsPage() {
   const [reports, setReports] = useState<ItemReport[]>([]);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("Pending Review");
+  const [editingItem, setEditingItem] =
+  useState<ItemReport | null>(null);
+  const [showEditModal, setShowEditModal] =
+    useState(false);
 
   const loadReportedItems = async () => {
     try {
@@ -73,6 +80,25 @@ function AdminReportedItemsPage() {
     }
   };
 
+  const handleDelete = async (
+    id: number
+  ) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this report?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await deleteReport(id);
+      await loadReportedItems();
+      alert("Report deleted.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete report.");
+    }
+  };
+
   const handleStatusChange = async (
     id: number,
     status: PublicItemStatus
@@ -87,17 +113,40 @@ function AdminReportedItemsPage() {
     }
   };
 
-  const filteredReports = reports.filter((item) => {
-    const matchesSearch = `${item.itemName} ${item.reportType} ${item.category} ${item.location} ${item.status}`
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  const filteredReports = reports.filter((report) => {
+      const matchesSearch = `
+        ${report.itemName}
+        ${report.category}
+        ${report.location}
+      `
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "All" ||
-      item.status === statusFilter;
+      let matchesStatus = true;
 
-    return matchesSearch && matchesStatus;
-  });
+      if (statusFilter === "Pending Review") {
+
+        matchesStatus =
+          report.status === "Under Review";
+
+      } else if (statusFilter === "Published") {
+
+        matchesStatus = [
+          "Unclaimed",
+          "Pending Claim",
+          "Claimed",
+        ].includes(report.status ?? "");
+
+      } else if (statusFilter === "Rejected") {
+
+        matchesStatus =
+          report.status === "Rejected";
+
+      }
+
+      return matchesSearch && matchesStatus;
+
+    });
 
   return (
     <div className="lf-dashboard">
@@ -139,63 +188,28 @@ function AdminReportedItemsPage() {
           <div className="explore-tabs">
             <button
               className={
-                statusFilter === "All" ? "active" : ""
-              }
-              onClick={() => setStatusFilter("All")}
-            >
-              All
-            </button>
-
-            <button
-              className={
-                statusFilter === "Under Review"
+                statusFilter === "Pending Review"
                   ? "active"
                   : ""
               }
               onClick={() =>
-                setStatusFilter("Under Review")
+                setStatusFilter("Pending Review")
               }
             >
-              Under Review
+              Pending Review
             </button>
 
             <button
               className={
-                statusFilter === "Unclaimed"
+                statusFilter === "Published"
                   ? "active"
                   : ""
               }
               onClick={() =>
-                setStatusFilter("Unclaimed")
+                setStatusFilter("Published")
               }
             >
-              Unclaimed
-            </button>
-
-            <button
-              className={
-                statusFilter === "Pending Claim"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setStatusFilter("Pending Claim")
-              }
-            >
-              Pending Claim
-            </button>
-
-            <button
-              className={
-                statusFilter === "Claimed"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setStatusFilter("Claimed")
-              }
-            >
-              Claimed
+              Published
             </button>
 
             <button
@@ -210,6 +224,20 @@ function AdminReportedItemsPage() {
             >
               Rejected
             </button>
+
+            <button
+              className={
+                statusFilter === "All"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setStatusFilter("All")
+              }
+            >
+              All
+            </button>
+
           </div>
         </section>
 
@@ -221,6 +249,14 @@ function AdminReportedItemsPage() {
               onApprove={handleApprove}
               onReject={handleReject}
               onStatusChange={handleStatusChange}
+
+               onEdit={(item) => {
+                  setEditingItem(item);
+                  setShowEditModal(true);
+              }}
+              onDelete={(item) => {
+                  handleDelete(item.id);
+              }}
             />
           ))}
         </section>
@@ -229,6 +265,16 @@ function AdminReportedItemsPage() {
           <p className="explore-empty">
             No reported items found.
           </p>
+        )}
+        {showEditModal && editingItem && (
+          <EditReportedItemModal
+            item={editingItem}
+            onClose={() => {
+              setShowEditModal(false);
+              setEditingItem(null);
+              loadReportedItems();
+            }}
+          />
         )}
       </main>
     </div>
