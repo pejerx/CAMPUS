@@ -1,19 +1,14 @@
-import {
-  IconBell,
-  IconChevronDown,
-  IconSearch,
-} from "@tabler/icons-react";
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../css/style.css";
 import "../css/component_style.css";
 
-import UserSidebar from "../user/component_user_sidebar";
+import UserHeader from "./component_user_header";
+import UserSidebar from "./component_user_sidebar";
 import ReportItemModal from "../item-report/report_item_form";
 
-import { getUserClaimRequests } from "./claim_request_api";
+import { getUserClaimRequests } from "../request-claim/claim_request_api";
 
 type ItemReport = {
   id: number;
@@ -65,16 +60,6 @@ function ClaimRequestPage() {
 
   const [showReportModal, setShowReportModal] =
     useState(false);
-
-  const handleLogout = () => {
-
-    localStorage.removeItem("user");
-
-    navigate("/", {
-      replace: true,
-    });
-
-  };
 
   const loadClaimRequests =
     async () => {
@@ -150,44 +135,7 @@ function ClaimRequestPage() {
 
       <main className="lf-main">
 
-        <header className="lf-header">
-
-          <div className="lf-search">
-
-            <input
-              type="text"
-              placeholder="Search my claim requests..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
-
-            <IconSearch size={18} />
-
-          </div>
-
-          <div className="lf-header-right">
-
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-
-              <div className="lf-small-avatar">
-                {user.firstName?.charAt(0).toUpperCase() || "U"}
-              </div>
-
-              <span>
-                {user.firstName || "User"}
-              </span>
-
-              <IconChevronDown size={16} />
-
-            </div>
-
-          </div>
-
-        </header>
+        <UserHeader />
 
         <section className="explore-header">
 

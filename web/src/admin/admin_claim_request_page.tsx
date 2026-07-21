@@ -1,6 +1,4 @@
 import {
-  IconBell,
-  IconChevronDown,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -106,11 +104,8 @@ function AdminClaimRequestsPage() {
   return (
     <div className="lf-dashboard">
       <AdminSidebar active="claim-requests" />
-
       <main className="lf-main">
-
         <header className="lf-header">
-
           <div className="lf-search">
 
             <input
@@ -121,29 +116,8 @@ function AdminClaimRequestsPage() {
                 setSearch(e.target.value)
               }
             />
-
             <IconSearch size={18} />
-
           </div>
-
-          <div className="lf-header-right">
-
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-
-              <div className="lf-small-avatar">
-                A
-              </div>
-
-              <span>Admin</span>
-
-              <IconChevronDown size={16} />
-
-            </div>
-
-          </div>
-
         </header>
 
         <section className="explore-header">

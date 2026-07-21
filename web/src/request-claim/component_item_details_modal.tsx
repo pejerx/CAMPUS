@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import React from "react";
 import "../css/component_style.css";
 
 type ItemReport = {
@@ -28,13 +27,12 @@ function ItemDetailsModal({
   onClose,
 }: Props) {
   const navigate = useNavigate();
-  const type =
+  const rawType =
     item.reportType || item.itemType || "Unknown";
 
-  const location =
-    item.location ||
-    item.lastSeenLocation ||
-    "No location provided";
+  const type = rawType.toUpperCase();
+
+  const location = item.location || item.lastSeenLocation || "No location provided";
 
   const imageSource = item.imageUrl
     ? item.imageUrl
@@ -98,12 +96,12 @@ function ItemDetailsModal({
 
             <span
               className={
-                type === "Lost"
+                type === "LOST"
                   ? "lf-badge lost"
                   : "lf-badge found"
               }
             >
-              {type}
+              {type.charAt(0) + type.slice(1).toLowerCase()}
             </span>
 
             <div className="item-modal-information">
@@ -141,25 +139,31 @@ function ItemDetailsModal({
             </div>
 
             <div className="item-modal-buttons">
+              {type === "FOUND" ? (
 
-              {type === "Found" && (
-                <button className="explore-btn">
+                <button
+                  className="explore-btn"
+                  onClick={() =>
+                    navigate("/claim-request", {
+                      state: {
+                        item,
+                      },
+                    })
+                  }
+                >
                   Request Claim
                 </button>
-              )}
 
-              <button
-                className="explore-btn outline"
-                onClick={() =>
-                  navigate("/claim-request", {
-                    state: {
-                      item: item,
-                    },
-                  })
-                }
-              >
-                Claim Item
-              </button>
+              ) : (
+
+                <button
+                  className="explore-btn outline"
+                  onClick={onClose}
+                >
+                  Close
+                </button>
+
+              )}
 
             </div>
 

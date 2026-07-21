@@ -11,7 +11,7 @@ import ClaimRequestPage from "./request-claim/claim_item_page";
 import ClaimSuccessPage from "./request-claim/form_claim_success_page";
 import AdminClaimRequestsPage from "./admin/admin_claim_request_page";
 import MyReportsPage from "./user/my_reports_page";
-import MyClaimsPage from "./request-claim/claim_request_page";
+import MyClaimsPage from "./user/claim_request_page";
 
 setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/');
 

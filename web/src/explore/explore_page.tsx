@@ -1,15 +1,10 @@
-import {
-  IconBell,
-  IconChevronDown,
-  IconSearch,
-} from "@tabler/icons-react";
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../css/style.css";
 import "../css/component_style.css";
 
+import UserHeader from "../user/component_user_header";
 import ReportItemModal from "../item-report/report_item_form";
 import UserSidebar from "../user/component_user_sidebar";
 import ExploreCard from "./explore_card";
@@ -38,11 +33,6 @@ function ExplorePage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [showReportModal, setShowReportModal] = useState(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/", { replace: true });
-  };
 
   const loadReports = async () => {
     try {
@@ -90,33 +80,7 @@ function ExplorePage() {
       <UserSidebar active="explore" onReportClick={() => setShowReportModal(true)} />
 
       <main className="lf-main">
-        <header className="lf-header">
-          <div className="lf-search">
-            <input
-              type="text"
-              placeholder="Search lost and found items"
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
-            <IconSearch size={18} />
-          </div>
-
-          <div className="lf-header-right">
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-              <div className="lf-small-avatar">
-                U
-              </div>
-
-              <span>User</span>
-
-              <IconChevronDown size={16} />
-            </div>
-          </div>
-        </header>
+        <UserHeader />
 
         <section className="explore-header">
           <div>

@@ -1,7 +1,5 @@
 
 import {
-  IconBell,
-  IconChevronDown,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -16,6 +14,7 @@ import { getAllReports, updateReportStatus } from "./admin_api";
 type ItemReport = {
   id: number;
   itemName?: string;
+  reportType?: string;
   itemType?: string;
   location?: string;
   description?: string;
@@ -28,8 +27,6 @@ function AdminDashboardPage() {
 
   const [reports, setReports] = useState<ItemReport[]>([]);
   const [search, setSearch] = useState("");
-
-  
 
   const loadReports = async () => {
     try {
@@ -55,14 +52,17 @@ function AdminDashboardPage() {
     }
   };
 
-  const filteredReports = reports.filter((report) =>
-    `${report.itemName} ${report.itemType} ${report.location} ${report.status}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const lostCount = reports.filter(
+    (report) =>
+      (report.reportType || report.itemType)?.toUpperCase() ===
+      "LOST"
+  ).length;
 
-  const lostCount = reports.filter((report) => report.itemType === "Lost").length;
-  const foundCount = reports.filter((report) => report.itemType === "Found").length;
+  const foundCount = reports.filter(
+    (report) =>
+      (report.reportType || report.itemType)?.toUpperCase() ===
+      "FOUND"
+  ).length;
   const unclaimedCount = reports.filter(
     (report) => report.status === "Unclaimed"
   ).length;
@@ -80,16 +80,6 @@ function AdminDashboardPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
             <IconSearch size={18} />
-          </div>
-
-          <div className="lf-header-right">
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-              <div className="lf-small-avatar">A</div>
-              <span>Admin</span>
-              <IconChevronDown size={16} />
-            </div>
           </div>
         </header>
 
@@ -120,72 +110,150 @@ function AdminDashboardPage() {
               <h2>Reported Items</h2>
               <button onClick={loadReports}>Refresh</button>
             </div>
+          <div className="admin-table">
 
-            <div className="lf-popular-grid">
-              {filteredReports.map((report) => (
-                <div className="lf-item-card" key={report.id}>
-                  <div className="lf-item-image">
-                    {report.imageUrl ? (
-                      <img
-                        src={`http://localhost:8080${report.imageUrl}`}
-                        alt={report.itemName}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "16px",
-                        }}
-                      />
-                    ) : (
-                      "📦"
-                    )}
-                  </div>
+  <div className="admin-table-header">
 
-                  <h3>{report.itemName || "Unnamed Item"}</h3>
-                  <p>{report.location || "No location provided"}</p>
+    <h3>Recent Reports</h3>
+    <button
+      className="explore-btn outline"
+      onClick={() => navigate("/admin-reported-items")}
+    >
+      View All
+    </button>
+  </div>
 
-                  <div className="lf-item-footer">
-                    <span
-                      className={
-                        report.itemType === "Lost"
-                          ? "lf-badge lost"
-                          : "lf-badge found"
-                      }
-                    >
-                      {report.itemType || "Unknown"}
-                    </span>
-                  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {reports
+        .slice(0, 5)
+        .map((report) => (
+          <tr key={report.id}>
+            <td>
+              {report.itemName}
+            </td>
+            <td>
+              <span
+                className={
+                  (report.reportType || report.itemType)?.toUpperCase() === "LOST"
+                    ? "lf-badge lost"
+                    :
+                     "lf-badge found"
+                }
+              >
+                {(report.reportType || report.itemType)?.toUpperCase()}
+              </span>
+            </td>
+            <td>
+              {report.status}
+            </td>
+            <td>
+              {report.location}
+            </td>
+          </tr>
+      ))}
 
-                  <p style={{ marginTop: "10px" }}>
-                    Status: <strong>{report.status || "Unclaimed"}</strong>
-                  </p>
+    </tbody>
+  </table>
+</div>
+<div className="admin-table">
+  <div className="admin-table-header">
+    <h3>Needs Approval</h3>
+    <button
+      className="explore-btn outline"
+      onClick={() => navigate("/admin-reported-items")}
+    >
+      Open Queue
+    </button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {reports
+        .filter(
+          (report) =>
+            report.status === "Under Review"
+        )
+        .slice(0, 5)
+        .map((report) => (
+          <tr key={report.id}>
+            <td>
 
-                  <select
-                    value={report.status || "Unclaimed"}
-                    onChange={(e) =>
-                      handleStatusChange(report.id, e.target.value)
-                    }
-                    style={{
-                      width: "100%",
-                      padding: "10px",
-                      marginTop: "10px",
-                      borderRadius: "10px",
-                      border: "1px solid #ddd",
-                    }}
-                  >
-                    <option value="Unclaimed">Unclaimed</option>
-                    <option value="Claimed">Claimed</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                </div>
-              ))}
-            </div>
+              {report.itemName}
 
-            {filteredReports.length === 0 && (
-              <p style={{ marginTop: "20px" }}>No reported items found.</p>
-            )}
+            </td>
+            <td>
+
+              <span
+                className={
+                  report.itemType === "Lost"
+                    ? "lf-badge lost"
+                    : "lf-badge found"
+                }
+              >
+                {report.itemType}
+              </span>
+            </td>
+            <td>
+
+              {report.location}
+
+            </td>
+            <td>
+
+              <div className="admin-action">
+
+                <button
+                  className="admin-approve"
+                  onClick={() =>
+                    navigate("/admin-reported-items")
+                  }
+                >
+                  Review
+                </button>
+              </div>
+            </td>
+          </tr>
+
+      ))}
+
+    </tbody>
+
+  </table>
+
+  {reports.filter(
+    (report) =>
+      report.status === "Under Review"
+  ).length === 0 && (
+
+    <p
+      style={{
+        marginTop: "20px",
+        color: "#777",
+      }}
+    >
+      No reports waiting for approval.
+    </p>
+
+  )}
+
+</div>
+            
           </div>
         </section>
       </main>

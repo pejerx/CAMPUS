@@ -1,20 +1,12 @@
-import {
-  IconChevronDown,
-  IconSearch,
-} from "@tabler/icons-react";
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import "../css/style.css";
 import "../css/component_style.css";
-
 import ReportItemModal from "../item-report/report_item_form";
 import UserSidebar from "./component_user_sidebar";
-import NotificationDropdown from "../notification/component_notifcation_dropdown";
-
 import { getPublicReports } from "../explore/explore_api";
 import { getMyReports } from "../item-report/report_api";
+import UserHeader from "./component_user_header";
 
 type ItemReport = {
   id: number;
@@ -187,41 +179,7 @@ function UserDashboardPage() {
 
     <main className="lf-main">
 
-      <header className="lf-header">
-
-        <div className="lf-search">
-          <input
-            type="text"
-            placeholder="Search public items..."
-            onFocus={() =>
-              navigate("/explore")
-            }
-            readOnly
-          />
-          <IconSearch size={18} />
-        </div>
-
-        <NotificationDropdown />
-
-        <div className="lf-user-chip">
-
-          <div className="lf-small-avatar">
-            {user.firstName
-              ?.charAt(0)
-              .toUpperCase() || "U"}
-          </div>
-
-          <span>
-            {user.firstName || "User"}
-          </span>
-
-          <IconChevronDown
-            size={16}
-          />
-
-        </div>
-
-      </header>
+      <UserHeader />
 
       <section className="lf-hero">
 

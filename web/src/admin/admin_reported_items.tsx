@@ -1,6 +1,4 @@
 import {
-  IconBell,
-  IconChevronDown,
   IconSearch,
 } from "@tabler/icons-react";
 
@@ -162,16 +160,6 @@ function AdminReportedItemsPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
             <IconSearch size={18} />
-          </div>
-
-          <div className="lf-header-right">
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-              <div className="lf-small-avatar">A</div>
-              <span>Admin</span>
-              <IconChevronDown size={16} />
-            </div>
           </div>
         </header>
 

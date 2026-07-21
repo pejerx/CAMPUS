@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:8080/api/reports";
+import API_BASE_URL from "../api/api_config";
+
+const REPORT_API_URL = `${API_BASE_URL}/api/reports`;
 
 /*
  * ==========================================================
@@ -9,9 +11,10 @@ const API_URL = "http://localhost:8080/api/reports";
  * - Dashboard Statistics
  * ==========================================================
  */
-
 export async function getPublicReports() {
-  const response = await fetch(`${API_URL}/public`);
+  const response = await fetch(
+    `${REPORT_API_URL}/public`
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch public reports.");
@@ -28,9 +31,12 @@ export async function getPublicReports() {
  * - Report History
  * ==========================================================
  */
-
-export async function getUserReports(userId: string) {
-  const response = await fetch(`${API_URL}/user/${userId}`);
+export async function getMyReports(
+  userId: string
+) {
+  const response = await fetch(
+    `${REPORT_API_URL}/user/${userId}`
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch user reports.");
@@ -46,12 +52,14 @@ export async function getUserReports(userId: string) {
  * Loads both requests simultaneously.
  * ==========================================================
  */
-
-export async function getDashboardData(userId: string) {
-  const [publicReports, userReports] = await Promise.all([
-    getPublicReports(),
-    getUserReports(userId),
-  ]);
+export async function getDashboardData(
+  userId: string
+) {
+  const [publicReports, userReports] =
+    await Promise.all([
+      getPublicReports(),
+      getMyReports(userId),
+    ]);
 
   return {
     publicReports,

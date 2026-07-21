@@ -36,8 +36,14 @@ function ExploreCard({
   onDelete,
 }: ExploreCardProps) {
   const [showDetails, setShowDetails] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const type = item.reportType || item.itemType || "Unknown";
+  const currentUser = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
+
+  const isOwnReport = currentUser.id === item.userId;
+  const rawType = item.reportType || item.itemType || "Unknown";
+const [showMenu, setShowMenu] = useState(false);
+  const type = rawType.toUpperCase();
 
   const location =
     item.location || item.lastSeenLocation || "No location provided";
@@ -83,12 +89,12 @@ function ExploreCard({
           <div className="explore-footer">
             <span
               className={
-                type === "Lost"
+                type === "LOST"
                   ? "lf-badge lost"
                   : "lf-badge found"
               }
             >
-              {type}
+              {type.charAt(0) + type.slice(1).toLowerCase()}
             </span>
 
             <span className="explore-status">
@@ -100,63 +106,77 @@ function ExploreCard({
 
             <div className="explore-actions">
 
-            <button
-              className="explore-btn outline"
-              onClick={() => setShowDetails(true)}
-            >
-              View
-            </button>
-
-            <div className="explore-menu">
-
               <button
-                className="explore-menu-btn"
-                onClick={() => setShowMenu(!showMenu)}
+                className="explore-btn outline"
+                onClick={() => setShowDetails(true)}
               >
-                <IconDotsVertical size={18} />
+                View
               </button>
 
-              {showMenu && (
+              <div className="explore-menu">
 
-                <div className="explore-dropdown">
+                <button
+                  className="explore-menu-btn"
+                  onClick={() => setShowMenu(!showMenu)}
+                >
+                  <IconDotsVertical size={18} />
+                </button>
 
-                  <button
-                    onClick={() => {
-                      setShowMenu(false);
-                      onEdit?.(item);
-                    }}
-                  >
-                    Edit Report
-                  </button>
+                {showMenu && (
 
-                  <button
-                    className="delete"
-                    onClick={() => {
-                      setShowMenu(false);
-                      onDelete?.(item);
-                    }}
-                  >
-                    Delete Report
-                  </button>
+                  <div className="explore-dropdown">
 
-                </div>
+                    <button
+                      onClick={() => {
+                        setShowMenu(false);
+                        onEdit?.(item);
+                      }}
+                    >
+                      Edit Report
+                    </button>
 
-              )}
+                    <button
+                      className="delete"
+                      onClick={() => {
+                        setShowMenu(false);
+                        onDelete?.(item);
+                      }}
+                    >
+                      Delete Report
+                    </button>
+
+                  </div>
+
+                )}
+
+              </div>
 
             </div>
 
-          </div>
-
           ) : (
 
-            type === "Found" ? (
+            type === "FOUND" ? (
 
-              <button
-                className="explore-btn"
-                onClick={() => setShowDetails(true)}
-              >
-                Request Claim
-              </button>
+              isOwnReport ? (
+
+                <button
+                  className="explore-btn outline"
+                  disabled
+                  title="You cannot request a claim for your own report."
+                >
+                  Your Report
+                </button>
+
+              ) : (
+
+                <button
+                  className="explore-btn"
+                  onClick={() => setShowDetails(true)}
+                >
+                  Request Claim
+                </button>
+
+              )
 
             ) : (
 

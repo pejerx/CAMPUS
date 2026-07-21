@@ -1,3 +1,7 @@
+import API_BASE_URL from "../api/api_config";
+
+const REPORT_API_URL = `${API_BASE_URL}/api/reports`;
+
 type CreateReportItemData = {
   userId: string;
   reportType: "LOST" | "FOUND";
@@ -9,7 +13,14 @@ type CreateReportItemData = {
   imageUrl?: string;
 };
 
-export async function createReportItem(data: CreateReportItemData) {
+/*
+ * ==========================================================
+ * CREATE REPORT
+ * ==========================================================
+ */
+export async function createReportItem(
+  data: CreateReportItemData
+) {
   const formData = new FormData();
 
   formData.append("userId", data.userId);
@@ -27,30 +38,89 @@ export async function createReportItem(data: CreateReportItemData) {
     formData.append("imageUrl", data.imageUrl);
   }
 
-  const response = await fetch("http://localhost:8080/api/reports", {
+  const response = await fetch(REPORT_API_URL, {
     method: "POST",
     body: formData,
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create report");
+    throw new Error("Failed to create report.");
   }
 
   return response.json();
 }
 
-export async function getMyReports(userId: string) {
+/*
+ * ==========================================================
+ * GET PUBLIC REPORTS
+ *
+ * Used by:
+ * - Dashboard
+ * - Explore Page
+ * ==========================================================
+ */
+export async function getPublicReports() {
   const response = await fetch(
-    `http://localhost:8080/api/reports/user/${userId}`
+    `${REPORT_API_URL}/public`
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch your reports.");
+    throw new Error(
+      "Failed to fetch public reports."
+    );
   }
 
   return response.json();
 }
 
+/*
+ * ==========================================================
+ * GET USER REPORTS
+ * ==========================================================
+ */
+export async function getMyReports(
+  userId: string
+) {
+  const response = await fetch(
+    `${REPORT_API_URL}/user/${userId}`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch your reports."
+    );
+  }
+
+  return response.json();
+}
+
+/*
+ * ==========================================================
+ * DASHBOARD DATA
+ *
+ * Loads everything needed by the dashboard.
+ * ==========================================================
+ */
+export async function getDashboardData(
+  userId: string
+) {
+  const [publicReports, userReports] =
+    await Promise.all([
+      getPublicReports(),
+      getMyReports(userId),
+    ]);
+
+  return {
+    publicReports,
+    userReports,
+  };
+}
+
+/*
+ * ==========================================================
+ * UPDATE REPORT
+ * ==========================================================
+ */
 export async function updateReport(
   id: number,
   data: {
@@ -61,34 +131,44 @@ export async function updateReport(
   }
 ) {
   const response = await fetch(
-    `http://localhost:8080/api/reports/${id}`,
+    `${REPORT_API_URL}/${id}`,
     {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type":
+          "application/json",
       },
       body: JSON.stringify(data),
     }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to update report.");
+    throw new Error(
+      "Failed to update report."
+    );
   }
 
   return response.json();
 }
 
+/*
+ * ==========================================================
+ * DELETE REPORT
+ * ==========================================================
+ */
 export async function deleteReport(
   id: number
 ) {
   const response = await fetch(
-    `http://localhost:8080/api/reports/${id}`,
+    `${REPORT_API_URL}/${id}`,
     {
       method: "DELETE",
     }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to delete report.");
+    throw new Error(
+      "Failed to delete report."
+    );
   }
 }

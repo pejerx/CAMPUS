@@ -1,15 +1,9 @@
-import {
-  IconBell,
-  IconChevronDown,
-  IconSearch,
-} from "@tabler/icons-react";
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../css/style.css";
 import "../css/component_style.css";
-
+import UserHeader from "./component_user_header";
 import EditReportedItemModal from "../item-report/edit_reported_item";
 import ReportItemModal from "../item-report/report_item_form";
 import ExploreCard from "../explore/explore_card";
@@ -122,11 +116,13 @@ function MyReportsPage() {
   const getItemType = (
     item: ItemReport
   ) => {
+
     return (
       item.reportType ||
       item.itemType ||
       "Unknown"
-    );
+    ).toUpperCase();
+
   };
 
   const filteredReports =
@@ -145,7 +141,7 @@ function MyReportsPage() {
 
       const matchesFilter =
         filter === "All" ||
-        type === filter;
+        type === filter.toUpperCase();
 
       return (
         matchesSearch &&
@@ -157,37 +153,7 @@ function MyReportsPage() {
     <div className="lf-dashboard">
       <UserSidebar active="home" onReportClick={() => setShowReportModal(true)} />
       <main className="lf-main">
-        <header className="lf-header">
-          <div className="lf-search">
-            <input
-              type="text"
-              placeholder="Search my reports..."
-              value={search}
-              onChange={(e) =>
-                setSearch(
-                  e.target.value
-                )
-              }
-            />
-            <IconSearch size={18} />
-          </div>
-          <div className="lf-header-right">
-            <IconBell size={21} />
-
-            <div className="lf-user-chip">
-
-              <div className="lf-small-avatar">
-                U
-              </div>
-              <span>
-                {user.firstName}
-              </span>
-              <IconChevronDown
-                size={16}
-              />
-            </div>
-          </div>
-        </header>
+        <UserHeader />
         <section className="explore-header">
           <div>
             <h1>
@@ -239,11 +205,8 @@ function MyReportsPage() {
             >
               Found
             </button>
-
           </div>
-
         </section>
-
         <section className="explore-grid">
 
           {filteredReports.map(
