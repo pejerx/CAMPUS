@@ -1,5 +1,7 @@
+import API_BASE_URL from "../api/api_config";
+
 const CLAIM_API_URL =
-  "http://localhost:8080/api/claim-requests";
+  `${API_BASE_URL}/api/claim-requests`;
 
 export async function getClaimRequests() {
   const response = await fetch(CLAIM_API_URL);

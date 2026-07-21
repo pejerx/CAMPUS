@@ -1,5 +1,6 @@
-const ADMIN_API_URL = "http://localhost:8080/api/admin";
+import API_BASE_URL from "../api/api_config";
 
+const ADMIN_API_URL = `${API_BASE_URL}/api/admin`;
 /*
  * These are the only statuses that can exist
  * after a report has already been approved.

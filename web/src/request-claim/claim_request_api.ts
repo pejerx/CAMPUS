@@ -1,6 +1,7 @@
-const CLAIM_REQUEST_API_URL =
-  "http://localhost:8080/api/claim-requests";
+import API_BASE_URL from "../api/api_config";
 
+const CLAIM_REQUEST_API_URL =
+  `${API_BASE_URL}/api/claim-requests`;
 /*
  * Submit a claim request.
  */

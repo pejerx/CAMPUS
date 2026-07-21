@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:8080/api/notifications";
+import API_BASE_URL from "../api/api_config";
+
+const NOTIFICATION_API_URL =
+  `${API_BASE_URL}/api/notifications`;
 
 export type Notification = {
   id: number;
@@ -17,7 +20,7 @@ export async function getNotifications(
 ): Promise<Notification[]> {
 
   const response = await fetch(
-    `${API_URL}/user/${userId}`
+    `${NOTIFICATION_API_URL}/user/${userId}`
   );
 
   if (!response.ok) {
@@ -37,7 +40,7 @@ export async function getUnreadNotificationCount(
 ): Promise<number> {
 
   const response = await fetch(
-    `${API_URL}/user/${userId}/count`
+    `${NOTIFICATION_API_URL}/user/${userId}/count`
   );
 
   if (!response.ok) {
@@ -57,7 +60,7 @@ export async function markNotificationAsRead(
 ) {
 
   const response = await fetch(
-    `${API_URL}/${notificationId}/read`,
+    `${NOTIFICATION_API_URL}/${notificationId}/read`,
     {
       method: "PUT",
     }
@@ -80,7 +83,7 @@ export async function markAllNotificationsAsRead(
 ) {
 
   const response = await fetch(
-    `${API_URL}/user/${userId}/read-all`,
+    `${NOTIFICATION_API_URL}/user/${userId}/read-all`,
     {
       method: "PUT",
     }
