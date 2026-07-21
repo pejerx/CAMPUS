@@ -45,8 +45,12 @@ function ExplorePage() {
   }, []);
 
   const getItemType = (item: ItemReport) => {
-    return item.reportType || item.itemType || "Unknown";
-  };
+  return (
+    item.reportType ||
+    item.itemType ||
+    "Unknown"
+  ).toUpperCase();
+};
 
   const getLocation = (item: ItemReport) => {
     return (
@@ -66,7 +70,8 @@ function ExplorePage() {
       .includes(search.toLowerCase());
 
     const matchesFilter =
-      filter === "All" || type === filter;
+      filter === "All" ||
+      type === filter.toUpperCase();
 
     return matchesSearch && matchesFilter;
   });
