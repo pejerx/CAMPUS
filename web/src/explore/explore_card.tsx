@@ -167,6 +167,16 @@ const [showMenu, setShowMenu] = useState(false);
                   Your Report
                 </button>
 
+              ) : item.status === "Claimed" ? (
+
+                <button
+                  className="explore-btn outline"
+                  disabled
+                  title="This item has already been claimed."
+                >
+                  Already Claimed
+                </button>
+
               ) : (
 
                 <button
@@ -197,6 +207,8 @@ const [showMenu, setShowMenu] = useState(false);
         <ItemDetailsModal
           item={item}
           onClose={() => setShowDetails(false)}
+          canRequestClaim={variant !== "myReports"}
+        
         />
       )}
     </>

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import "../css/style.css";
 import "../css/component_style.css";
 
@@ -27,10 +25,8 @@ type ItemReport = {
 };
 
 function ExplorePage() {
-  const navigate = useNavigate();
-
   const [reports, setReports] = useState<ItemReport[]>([]);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [filter, setFilter] = useState("All");
   const [showReportModal, setShowReportModal] = useState(false);
 

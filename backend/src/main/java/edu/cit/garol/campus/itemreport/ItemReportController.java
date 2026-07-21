@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/reports")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ItemReportController {
 
     private final ItemReportRepository itemReportRepository;

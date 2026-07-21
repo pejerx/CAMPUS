@@ -185,16 +185,38 @@
   display: grid;
   place-items: center;
   z-index: 999;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .report-modal {
   width: 480px;
   max-width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
   background: #ffffff;
   border-radius: 22px;
   padding: 30px;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.report-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.report-modal::-webkit-scrollbar-track {
+  background: #f2f2f2;
+  border-radius: 999px;
+}
+
+.report-modal::-webkit-scrollbar-thumb {
+  background: #800000;
+  border-radius: 999px;
+}
+
+.report-modal::-webkit-scrollbar-thumb:hover {
+  background: #5f0000;
 }
 
 .report-modal h2 {
@@ -502,24 +524,21 @@
 =========================================================== */
 
 .claim-details-modal {
-  width: 1100px;
-  max-width: 96%;
+  width: min(950px, 92vw);
   max-height: 90vh;
-
   overflow-y: auto;
-
   background: #ffffff;
   border-radius: 18px;
-  padding: 30px;
+  padding: 28px;
   position: relative;
-
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
 }
 
 .claim-details-layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 32px;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
 .claim-item-section {
@@ -546,9 +565,12 @@
 
 .claim-item-image {
   width: 100%;
+  height: 260px;
+
+  object-fit: cover;
+
   border-radius: 14px;
   margin-bottom: 16px;
-  object-fit: cover;
 }
 
 .claim-item-placeholder {
@@ -591,9 +613,12 @@
 }
 
 .claim-proof-image {
-  width: 260px;
+  width: 240px;
+  max-width: 100%;
+
   border-radius: 12px;
-  border: 3px solid #ffc627;
+  border: 3px solid #FFD700;
+
   margin-top: 12px;
 }
 

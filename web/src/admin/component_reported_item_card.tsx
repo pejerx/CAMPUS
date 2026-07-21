@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { PublicItemStatus } from "./admin_api";
 

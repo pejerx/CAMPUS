@@ -33,7 +33,7 @@ export async function approveClaimRequest(
     );
   }
 
-  return response.json();
+  return response.text();
 }
 
 export async function rejectClaimRequest(
@@ -54,5 +54,5 @@ export async function rejectClaimRequest(
     );
   }
 
-  return response.json();
+  return response.text();
 }

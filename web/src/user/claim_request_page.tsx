@@ -49,7 +49,7 @@ function ClaimRequestPage() {
   const [claimRequests, setClaimRequests] =
     useState<ClaimRequest[]>([]);
 
-  const [search, setSearch] =
+  const [search] =
     useState("");
 
   const [filter, setFilter] =

@@ -1,6 +1,5 @@
 import {
   IconArrowLeft,
-  IconUpload,
 } from "@tabler/icons-react";
 
 import {

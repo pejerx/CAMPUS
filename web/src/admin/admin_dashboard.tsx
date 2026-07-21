@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/style.css";
 import "../css/component_style.css";
 import AdminSidebar from "./component_admin_sidebar";
-import { getAllReports, updateReportStatus } from "./admin_api";
+import { getAllReports } from "./admin_api";
 
 type ItemReport = {
   id: number;
@@ -41,16 +41,6 @@ function AdminDashboardPage() {
   useEffect(() => {
     loadReports();
   }, []);
-
-  const handleStatusChange = async (id: number, status: string) => {
-    try {
-      await updateReportStatus(String(id), status as any);
-      loadReports();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to update item status.");
-    }
-  };
 
   const lostCount = reports.filter(
     (report) =>

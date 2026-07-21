@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import "../css/style.css";
 import "../css/component_style.css";
@@ -31,8 +30,6 @@ type ItemReport = {
 };
 
 function MyReportsPage() {
-  const navigate = useNavigate();
-
   const user = JSON.parse(
     localStorage.getItem("user") || "{}"
   );
@@ -46,7 +43,7 @@ function MyReportsPage() {
   const [reports, setReports] =
     useState<ItemReport[]>([]);
 
-  const [search, setSearch] =
+  const [search] =
     useState("");
 
   const [filter, setFilter] =
@@ -54,11 +51,6 @@ function MyReportsPage() {
 
   const [showReportModal, setShowReportModal] =
     useState(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/", { replace: true });
-  };
 
   const loadReports = async () => {
     try {

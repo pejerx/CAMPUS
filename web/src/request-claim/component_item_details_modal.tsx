@@ -20,11 +20,13 @@ type ItemReport = {
 type Props = {
   item: ItemReport;
   onClose: () => void;
+  canRequestClaim?: boolean;
 };
 
 function ItemDetailsModal({
   item,
   onClose,
+  canRequestClaim = true,
 }: Props) {
   const navigate = useNavigate();
   const rawType =
@@ -139,15 +141,13 @@ function ItemDetailsModal({
             </div>
 
             <div className="item-modal-buttons">
-              {type === "FOUND" ? (
+              {canRequestClaim && type === "FOUND" ? (
 
                 <button
                   className="explore-btn"
                   onClick={() =>
                     navigate("/claim-request", {
-                      state: {
-                        item,
-                      },
+                      state: {item,},
                     })
                   }
                 >

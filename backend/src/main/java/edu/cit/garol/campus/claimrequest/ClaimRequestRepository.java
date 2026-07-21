@@ -39,4 +39,5 @@ public interface ClaimRequestRepository
             ItemReport itemReport,
             String claimantId
     );
+
 }

@@ -21,7 +21,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/claim-requests")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ClaimRequestController {
 
     private final ClaimRequestRepository claimRequestRepository;
@@ -64,10 +63,6 @@ public class ClaimRequestController {
                                     new RuntimeException(
                                             "Item report not found."
                                     ));
-
-            /*
-             * Prevent duplicate claim requests.
-             */
             if (claimRequestRepository.existsByItemReportAndClaimantId(
                     report,
                     claimantId
@@ -146,10 +141,6 @@ public class ClaimRequestController {
                             claimRequest
                     );
 
-            /*
-             * Automatically change the item status
-             * while waiting for admin review.
-             */
             report.setStatus("Pending Claim");
 
             itemReportRepository.save(report);
@@ -168,9 +159,6 @@ public class ClaimRequestController {
 
     }
 
-    /*
-     * Admin - View all claim requests.
-     */
     @GetMapping
     public ResponseEntity<List<ClaimRequest>>
     getAllClaimRequests() {
@@ -181,9 +169,6 @@ public class ClaimRequestController {
 
     }
 
-    /*
-     * User - View own claim requests.
-     */
     @GetMapping("/user/{claimantId}")
     public ResponseEntity<List<ClaimRequest>>
     getUserClaimRequests(
@@ -199,9 +184,6 @@ public class ClaimRequestController {
 
     }
 
-    /*
-     * Admin - Update claim status.
-     */
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateClaimStatus(
 
@@ -274,10 +256,6 @@ public class ClaimRequestController {
                         notification
                 );
 
-            /*
-             * If approved,
-             * mark the item as claimed.
-             */
             if ("Approved".equalsIgnoreCase(status)) {
 
                 ItemReport report =
@@ -323,9 +301,7 @@ public class ClaimRequestController {
 
         }
 
-    /*
-     * Retrieve uploaded proof image.
-     */
+
     @GetMapping("/proofs/{fileName:.+}")
     public ResponseEntity<Resource>
     getProofImage(

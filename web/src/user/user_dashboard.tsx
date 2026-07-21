@@ -73,16 +73,6 @@ function UserDashboardPage() {
 
   }, []);
 
-  const handleLogout = () => {
-
-    localStorage.removeItem("user");
-
-    navigate("/", {
-      replace: true,
-    });
-
-  };
-
   const actionCards = [
     {
       title: "Lost Items",
