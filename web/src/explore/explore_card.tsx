@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import "../css/component_style.css";
-
+import API_BASE_URL from "../api/api_config";
 import ItemDetailsModal from "../request-claim/component_item_details_modal";
 import { IconDotsVertical } from "@tabler/icons-react";
 
@@ -53,7 +53,7 @@ const [showMenu, setShowMenu] = useState(false);
     : item.imagePath
     ? item.imagePath.startsWith("http")
       ? item.imagePath
-      : `http://localhost:8080/${item.imagePath}`
+      : `${API_BASE_URL}/${item.imagePath}`
     : "";
 
   return (

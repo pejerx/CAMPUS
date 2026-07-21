@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import "../css/component_style.css";
+import API_BASE_URL from "../api/api_config";
 
 type ItemReport = {
   id: number;
@@ -54,7 +55,7 @@ function AdminDecisionModal({
     : item.imagePath
     ? item.imagePath.startsWith("http")
       ? item.imagePath
-      : `http://localhost:8080/${item.imagePath}`
+      : `${API_BASE_URL}${item.imagePath}`
     : "";
 
   const [reason, setReason] =

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import ClaimDetailsModal from "./component_claim_details_modal";
+import API_BASE_URL from "../api/api_config";
 
 type ClaimRequest = {
   id: number;
@@ -44,7 +45,7 @@ function AdminClaimRequestCard({
   const imageSource = item?.imagePath
     ? item.imagePath.startsWith("http")
       ? item.imagePath
-      : `http://localhost:8080/${item.imagePath}`
+      : `${API_BASE_URL}/${item.imagePath}`
     : "";
 
   return (

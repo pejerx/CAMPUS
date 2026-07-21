@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { PublicItemStatus } from "./admin_api";
+import API_BASE_URL from "../api/api_config";
 
 type ItemReport = {
   id: number;
@@ -42,7 +43,7 @@ function AdminReportedItemCard({
       return item.imagePath;
     }
 
-    return `http://localhost:8080/api/reports/${item.imagePath}`;
+    return `${API_BASE_URL}/api/reports/${item.imagePath}`;
   };
 
   const imageSource = getImageSource();

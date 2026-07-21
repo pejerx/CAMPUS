@@ -1,4 +1,5 @@
 import "../css/component_style.css";
+import API_BASE_URL from "../api/api_config";
 
 type ClaimRequest = {
   id: number;
@@ -50,14 +51,14 @@ function ClaimDetailsModal({
       : item?.imagePath
       ? item.imagePath.startsWith("http")
         ? item.imagePath
-        : `http://localhost:8080/${item.imagePath}`
+        : `${API_BASE_URL}/${item.imagePath}`
       : "";
 
   const proofImage =
     claim.proofImagePath
       ? claim.proofImagePath.startsWith("http")
         ? claim.proofImagePath
-        : `http://localhost:8080/${claim.proofImagePath}`
+        : `${API_BASE_URL}/${claim.proofImagePath}`
       : "";
 
   const location =

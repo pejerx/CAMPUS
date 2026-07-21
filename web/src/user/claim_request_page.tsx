@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/style.css";
 import "../css/component_style.css";
 
+import API_BASE_URL from "../api/api_config";
 import UserHeader from "./component_user_header";
 import UserSidebar from "./component_user_sidebar";
 import ReportItemModal from "../item-report/report_item_form";
@@ -223,7 +224,7 @@ function ClaimRequestPage() {
                 : item?.imagePath
                 ? item.imagePath.startsWith("http")
                   ? item.imagePath
-                  : `http://localhost:8080/${item.imagePath}`
+                  : `${API_BASE_URL}/${item.imagePath}`
                 : "";
 
             return (

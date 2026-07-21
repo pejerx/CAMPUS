@@ -7,6 +7,7 @@ import UserSidebar from "./component_user_sidebar";
 import { getPublicReports } from "../explore/explore_api";
 import { getMyReports } from "../item-report/report_api";
 import UserHeader from "./component_user_header";
+import API_BASE_URL from "../api/api_config";
 
 type ItemReport = {
   id: number;
@@ -150,7 +151,7 @@ function UserDashboardPage() {
 
     if (item.imagePath) {
 
-      return `http://localhost:8080/${item.imagePath}`;
+      return `${API_BASE_URL}/${item.imagePath}`;
 
     }
 
