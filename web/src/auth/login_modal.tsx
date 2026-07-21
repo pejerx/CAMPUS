@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/component_style.css";
 
+import API_BASE_URL from "../api/api_config";
+
 type LoginModalProps = {
   onClose: () => void;
   onRegister: () => void;
@@ -9,6 +11,7 @@ type LoginModalProps = {
 
 function LoginModal({ onClose, onRegister }: LoginModalProps) {
   const navigate = useNavigate();
+  const AUTH_API_URL = `${API_BASE_URL}/api/auth`;
 
   const [loginType, setLoginType] = useState<"USER" | "ADMIN">("USER");
   const [idOrEmail, setIdOrEmail] = useState("");
@@ -39,7 +42,7 @@ function LoginModal({ onClose, onRegister }: LoginModalProps) {
         return;
       }
 
-      const response = await fetch("http://localhost:8080/api/auth/login", {
+      const response = await fetch(`${AUTH_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -152,7 +152,7 @@ function DashboardPage() {
       <footer className="footer">
         <div className="footer-logo-container">
           <img
-            src="./public/campus-logo.png"
+            src="/campus-logo.png"
             alt="CAMPUS Logo"
             className="footer-logo"
           />
