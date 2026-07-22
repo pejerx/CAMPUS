@@ -18,7 +18,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.DropdownMenuItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportItemDialog(
     userId: String,
@@ -48,6 +54,24 @@ fun ReportItemDialog(
 
     var itemName by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
+    val categories = listOf(
+        "ID Card",
+        "Wallet",
+        "Keys",
+        "Phone",
+        "Laptop",
+        "Bag",
+        "Notebook",
+        "Umbrella",
+        "Water Bottle",
+        "Clothing",
+        "Jewelry",
+        "Others"
+    )
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
     var description by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
 
@@ -118,11 +142,63 @@ fun ReportItemDialog(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                ReportTextField(
-                    value = category,
-                    onValueChange = { category = it },
-                    label = "Category"
-                )
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = {
+                        expanded = !expanded
+                    }
+                ) {
+
+                    OutlinedTextField(
+                        value = category,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = {
+                            Text("Category")
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = expanded
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF800000),
+                            unfocusedBorderColor = Color(0xFFD4D4D4),
+                            cursorColor = Color(0xFF800000)
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
+                    )
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                        }
+                    ) {
+
+                        categories.forEach { option ->
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(option)
+                                },
+                                onClick = {
+                                    category = option
+                                    expanded = false
+                                }
+
+                            )
+
+                        }
+
+                    }
+
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Spacer(modifier = Modifier.height(10.dp))
 

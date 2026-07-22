@@ -6,17 +6,20 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import cit.edu.garol.campus.authentication.UserSession
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import cit.edu.garol.campus.features.dashboard.components.BottomNavigationBar
 import cit.edu.garol.campus.features.dashboard.components.HomeTopBar
 import cit.edu.garol.campus.features.dashboard.components.ItemGridCard
 import cit.edu.garol.campus.features.dashboard.components.ReportItemDialog
 import cit.edu.garol.campus.features.dashboard.components.UserSideBar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cit.edu.garol.campus.core.ApiConfig
 import cit.edu.garol.campus.core.network.RetrofitInstance
 import cit.edu.garol.campus.features.admin.repository.AdminRepository
 import cit.edu.garol.campus.features.admin.viewmodel.AdminViewModel
@@ -25,9 +28,14 @@ import cit.edu.garol.campus.features.dashboard.components.ItemDetailsDialog
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
 import cit.edu.garol.campus.features.claimrequest.component.ClaimRequestDialog
 import cit.edu.garol.campus.features.claimrequest.component.ClaimRequestForm
+import cit.edu.garol.campus.features.report.repository.ReportRepository
+import cit.edu.garol.campus.features.report.screens.UserReportedItemsScreen
+import cit.edu.garol.campus.features.report.viewmodel.ReportViewModel
+import cit.edu.garol.campus.features.report.viewmodel.ReportViewModelFactory
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun UserDashboardPage(
     onLogout: () -> Unit = {}
@@ -37,12 +45,17 @@ fun UserDashboardPage(
     )
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var showReportDialog by remember {
         mutableStateOf(false)
     }
+    var showUserReportedItems by remember {
+        mutableStateOf(false)
+    }
 
-    val currentUserId = "26-0000-000"
+    val currentUserId =
+        UserSession.currentUser?.id ?: ""
 
     val viewModel: AdminViewModel = viewModel(
         factory = AdminViewModelFactory(
@@ -51,9 +64,25 @@ fun UserDashboardPage(
             )
         )
     )
+    val reportViewModel: ReportViewModel = viewModel(
+        factory = ReportViewModelFactory(
+            ReportRepository()
+        )
+    )
+
+    val reportUiState by reportViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadPublicReports()
+    }
+
+    LaunchedEffect(reportUiState.uploadSuccess) {
+        if (reportUiState.uploadSuccess) {
+            showReportDialog = false
+            viewModel.loadPublicReports()
+
+        }
+
     }
 
     val uiState by viewModel.dashboardUiState.collectAsState()
@@ -77,29 +106,51 @@ fun UserDashboardPage(
             onDismiss = {
                 showReportDialog = false
             },
-            onSubmitLostItem = { userId, itemName, category, description, lastSeenLocation, imageUri, imageFileName ->
-                println("Lost Item Report")
-                println("userId: $userId")
-                println("itemName: $itemName")
-                println("category: $category")
-                println("description: $description")
-                println("lastSeenLocation: $lastSeenLocation")
-                println("imageUri: $imageUri")
-                println("imageFileName: $imageFileName")
+            onSubmitLostItem = { userId,
+                                 itemName,
+                                 category,
+                                 description,
+                                 lastSeenLocation,
+                                 imageUri,
+                                 imageFileName ->
+
+                reportViewModel.submitReport(
+                    context = context,
+                    userId = userId,
+                    reportType = "LOST",
+                    itemName = itemName,
+                    category = category,
+                    description = description,
+                    location = lastSeenLocation,
+                    imageUri = imageUri
+
+                )
 
                 showReportDialog = false
+
             },
-            onSubmitFoundItem = { userId, itemName, category, description, foundLocation, imageUri, imageFileName ->
-                println("Found Item Report")
-                println("userId: $userId")
-                println("itemName: $itemName")
-                println("category: $category")
-                println("description: $description")
-                println("foundLocation: $foundLocation")
-                println("imageUri: $imageUri")
-                println("imageFileName: $imageFileName")
+            onSubmitFoundItem = { userId,
+                                  itemName,
+                                  category,
+                                  description,
+                                  foundLocation,
+                                  imageUri,
+                                  imageFileName ->
+
+                reportViewModel.submitReport(
+                    context = context,
+                    userId = userId,
+                    reportType = "FOUND",
+                    itemName = itemName,
+                    category = category,
+                    description = description,
+                    location = foundLocation,
+                    imageUri = imageUri
+
+                )
 
                 showReportDialog = false
+
             }
         )
     }
@@ -108,33 +159,57 @@ fun UserDashboardPage(
 
         ItemDetailsDialog(
             item = item,
-            imageBaseUrl = "http://10.0.2.2:8080",
 
             onDismiss = {
                 selectedItem = null
             },
 
             onClaimClick = {
-
                 showClaimRequestDialog = true
+            },
 
-            }
-
+            showClaimButton = !showUserReportedItems,
+            currentUserId = UserSession.currentUser?.id
         )
 
-        if (showClaimRequestDialog) {
+        if (!showUserReportedItems && showClaimRequestDialog) {
             ClaimRequestDialog(
-
                 selectedItem = item,
                 onDismiss = {
                     showClaimRequestDialog = false
                 },
+
                 onSubmit = {
                     showClaimRequestDialog = false
                     selectedItem = null
                 }
             )
         }
+    }
+
+    if (showUserReportedItems) {
+
+        UserReportedItemsScreen(
+
+            onHomeClick = {
+                showUserReportedItems = false
+            },
+
+            onClaimRequestsClick = {
+                // TODO
+            },
+
+            onLogoutClick = {
+                onLogout()
+            },
+
+            onSeeDetails = {
+                selectedItem = it
+            }
+
+        )
+
+        return
     }
 
     ModalNavigationDrawer(
@@ -153,6 +228,8 @@ fun UserDashboardPage(
                         scope.launch {
                             drawerState.close()
                         }
+
+                        showUserReportedItems = true
                     },
                     onAboutClick = {
                         scope.launch {

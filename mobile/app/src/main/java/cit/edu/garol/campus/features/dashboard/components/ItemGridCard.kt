@@ -21,7 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.layout.ContentScale
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
+import coil.compose.AsyncImage
+import cit.edu.garol.campus.core.ApiConfig
 
 private val Maroon = Color(0xFF800000)
 @Composable
@@ -71,29 +76,29 @@ fun ItemGridCard(
             modifier = Modifier.height(28.dp)
         )
 
-        /*
-         * Item image.
-         *
-         * We'll replace this with the actual image
-         * after we add Coil.
-         */
-
-        Box(
-            modifier = Modifier
-                .size(95.dp)
-                .background(
-                    Color(0xFFE8E8E8),
-                    CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Text(
-                text = item.itemName.take(1),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
+        if (!item.imagePath.isNullOrBlank()) {
+            AsyncImage(
+                model = "${ApiConfig.BASE_URL}${item.imagePath}",
+                contentDescription = item.itemName,
+                modifier = Modifier.size(95.dp),
+                contentScale = ContentScale.Crop
             )
-
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(95.dp)
+                    .background(
+                        Color(0xFFE8E8E8),
+                        CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = item.itemName.take(1),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray
+                )
+            }
         }
 
         Spacer(
@@ -121,19 +126,24 @@ fun ItemGridCard(
             modifier = Modifier.height(6.dp)
         )
 
-        TextButton(
+        Button(
             onClick = {
                 onSeeDetails(item)
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.65f)   // 65% of the card width
+                .height(36.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Maroon,
+                contentColor = Color.White
+            )
         ) {
             Text(
                 text = "See Details",
-                color = Maroon
+                fontSize = 12.sp
             )
-        }
-    }
 
-    Divider(
-        color = Color(0xFFE0E0E0)
-    )
+        }
+
+    }
 }

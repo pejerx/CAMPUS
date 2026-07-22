@@ -1,15 +1,11 @@
-package cit.edu.garol.campus.features.report.api
+package cit.edu.garol.campus.features.report.repository
 
+import cit.edu.garol.campus.core.network.RetrofitInstance
 import cit.edu.garol.campus.features.admin.model.AdminReportItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Path
 
-interface ReportApi {
+class ReportRepository {
 
     /*
      * ==========================================================
@@ -17,8 +13,11 @@ interface ReportApi {
      * ==========================================================
      */
 
-    @GET("api/reports/public")
-    suspend fun getPublicReports(): List<AdminReportItem>
+    suspend fun getPublicReports(): List<AdminReportItem> {
+        return RetrofitInstance
+            .reportApi
+            .getPublicReports()
+    }
 
     /*
      * ==========================================================
@@ -26,10 +25,15 @@ interface ReportApi {
      * ==========================================================
      */
 
-    @GET("api/reports/user/{userId}")
     suspend fun getMyReports(
-        @Path("userId") userId: String
-    ): List<AdminReportItem>
+        userId: String
+    ): List<AdminReportItem> {
+
+        return RetrofitInstance
+            .reportApi
+            .getMyReports(userId)
+
+    }
 
     /*
      * ==========================================================
@@ -37,30 +41,27 @@ interface ReportApi {
      * ==========================================================
      */
 
-    @Multipart
-    @POST("api/reports")
     suspend fun createReport(
-
-        @Part("userId")
         userId: RequestBody,
-
-        @Part("reportType")
         reportType: RequestBody,
-
-        @Part("itemName")
         itemName: RequestBody,
-
-        @Part("category")
         category: RequestBody,
-
-        @Part("description")
         description: RequestBody,
-
-        @Part("location")
         location: RequestBody,
-
-        @Part
         image: MultipartBody.Part?
 
-    ): AdminReportItem
+    ): AdminReportItem {
+        return RetrofitInstance
+            .reportApi
+            .createReport(
+                userId = userId,
+                reportType = reportType,
+                itemName = itemName,
+                category = category,
+                description = description,
+                location = location,
+                image = image
+
+            )
+    }
 }

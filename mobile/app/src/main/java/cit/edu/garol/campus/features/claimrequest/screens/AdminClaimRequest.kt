@@ -188,30 +188,18 @@ fun AdminClaimRequest(
 
                             onApprove = {
 
-                                viewModel.approveClaimRequest(
-                                    claimRequest.id
+                                viewModel.approveClaimRequest(claimRequest.id
                                 )
-
                             },
-
                             onReject = {
-
-                                viewModel.rejectClaimRequest(
-                                    claimRequest.id
+                                viewModel.rejectClaimRequest(claimRequest.id
                                 )
-
                             }
-
                         )
-
                     }
-
                 }
-
             }
-
         }
-
     }
 
 }
