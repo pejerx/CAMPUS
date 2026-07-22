@@ -26,7 +26,6 @@ function DashboardPage() {
           <a href="#search">Search Items</a>
           <a href="#guidelines">Guidelines</a>
           <a href="#faqs">FAQs</a>
-          <a href="#contact">Contact</a>
           <button onClick={() => setShowLogin(true)}>Login / Sign Up</button>
         </div>
       </nav>
@@ -134,19 +133,6 @@ function DashboardPage() {
             </p>
           </details>
         </div>
-      </section>
-
-      <section className="contact-section" id="contact">
-        <h2>Contact Us</h2>
-
-        <form className="contact-form">
-          <input type="text" placeholder="Full Name" />
-          <input type="email" placeholder="Email Address" />
-          <input type="text" placeholder="Phone Number" />
-          <input type="text" placeholder="Subject" />
-          <textarea placeholder="Message"></textarea>
-          <button type="button">Send Message</button>
-        </form>
       </section>
 
       <footer className="footer">
