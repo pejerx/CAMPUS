@@ -12,7 +12,7 @@ function DashboardPage() {
       <nav className="navbar">
         <div className="logo-container">
           <img
-            src="./public/campus-logo.png"
+            src="/campus-logo.png"
             alt="CAMPUS Logo"
             className="navbar-logo"
           />
